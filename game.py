@@ -40,15 +40,20 @@ def draw_grid(surface):
                color = (200,200,200)
             pygame.draw.rect(surface, color, r)
 
-class Obstacle(pygame.Rect):
-    def __init__(self, x, y, width, height, vel):
-        super().__init__(x, y, width, height)
+class Obstacle(object):
+    def __init__(self, x, y, vel):
+        super().__init__(x, y)
         self.vel = vel
+        self.position = [x, y]
 
     def update(self):
-        self.x += self.vel
+        self.position[0] += self.vel
         if self.right > screen_width * 2/3 or self.left < screen_width/3 + 20:
             self.vel = -self.vel
+
+    def draw(self, x, y, surface):
+        r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
+        pygame.draw.rect(surface, green, r)
 
 class Player(object):
 
@@ -105,12 +110,12 @@ def main():
     vel_right = -3
 
     obstacles = [
-        Obstacle(screen_width/3 + 20, 240, 30, 30, vel_left),
-        Obstacle(screen_width/3 + 20, 360, 30, 30, vel_left),
-        Obstacle(screen_width/3 + 20, 480, 30, 30, vel_left),
-        Obstacle(screen_width * 2/3 - 50, 300, 30, 30, vel_right),
-        Obstacle(screen_width * 2/3 - 50, 420, 30, 30, vel_right),
-        Obstacle(screen_width * 2/3 - 50, 540, 30, 30, vel_right),
+        Obstacle(screen_width/3 + 20, 240, vel_left),
+        Obstacle(screen_width/3 + 20, 360, vel_left),
+        Obstacle(screen_width/3 + 20, 480, vel_left),
+        Obstacle(screen_width * 2/3 - 50, 300, vel_right),
+        Obstacle(screen_width * 2/3 - 50, 420, vel_right),
+        Obstacle(screen_width * 2/3 - 50, 540, vel_right),
     ]
 
     # define font
@@ -144,11 +149,11 @@ def main():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and player.get_position()[0] > 0:
             player.move('l')
-        if keys[pygame.K_RIGHT] and player.get_position()[0] < WIDTH:
+        if keys[pygame.K_RIGHT] and player.get_position()[0] < WIDTH - 1:
             player.move('r')
         if keys[pygame.K_UP] and player.get_position()[1] > 0:
             player.move('u')
-        if keys[pygame.K_DOWN] and player.get_position()[1] < HEIGHT:
+        if keys[pygame.K_DOWN] and player.get_position()[1] < HEIGHT - 1:
             player.move('d')
 
         ## collision with obstacle
@@ -167,21 +172,21 @@ def main():
 
         screen.fill(black)
 
-        if alive == True and win == False:
-            #pygame.draw.rect(screen, red, player)
-            pygame.draw.rect(screen, blue, goal)
+        #if alive == True and win == False:
+        #    #pygame.draw.rect(screen, red, player)
+        #    pygame.draw.rect(screen, blue, goal)
 
-            for wall in walls:
-                pygame.draw.rect(screen, white, wall)
+        #    for wall in walls:
+        #        pygame.draw.rect(screen, white, wall)
 
-            for obstacle in obstacles:
-                pygame.draw.rect(screen, green, obstacle)
+        #    for obstacle in obstacles:
+        #        pygame.draw.rect(screen, green, obstacle)
 
-        else:
-            if win:
-                draw_text("You Win!", font, white, 500, 20, screen)
-            else:
-                draw_text("Game Over", font, white, 500, 20, screen)
+        #else:
+        #    if win:
+        #        draw_text("You Win!", font, white, 500, 20, screen)
+        #    else:
+        #        draw_text("Game Over", font, white, 500, 20, screen)
         
         screen.blit(surface, (0,0))
         pygame.display.update()
