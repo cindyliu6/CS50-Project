@@ -43,7 +43,7 @@ def draw_grid(surface, walls):
             pygame.draw.rect(surface, color, r)
 
 # moving obstacle class
-class Obstacle(object):
+class Obstacle():
     def __init__(self, x, y, vel):
         self.vel = vel
         self.position = (x, y)
@@ -61,7 +61,7 @@ class Obstacle(object):
         return self.position
 
 # player class
-class Player(object):
+class Player():
 
     def __init__(self, x, y):
         self.position = (x, y)
@@ -81,7 +81,7 @@ class Player(object):
         pygame.draw.rect(surface, red, r)
     
 # goal class
-class Goal(object):
+class Goal():
     def __init__ (self, x, y):
         self.position = (x, y)
 
