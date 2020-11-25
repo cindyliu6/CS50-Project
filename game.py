@@ -1,4 +1,5 @@
 import pygame
+import numpy as np
 
 # define dimensions
 screen_width = 1200
@@ -28,6 +29,18 @@ class Obstacle(pygame.Rect):
         self.x += self.vel
         if self.right > screen_width * 2/3 or self.left < screen_width/3 + 20:
             self.vel = -self.vel
+
+class Player(object):
+    def __init__(self):
+        pass
+
+
+class Agent():
+    def __init__(self):
+        super().__init__()
+    def make_move():
+        i = int(np.random().random() * 4)
+
 
 def main():
     pygame.init()
