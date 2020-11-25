@@ -1,10 +1,11 @@
 import pygame
 import numpy as np
+import operator
 
 # define dimensions
 HEIGHT = 40
 WIDTH = 60
-SIZE = 20
+SIZE = 15
 screen_width = WIDTH * SIZE
 screen_height = HEIGHT * SIZE
 
@@ -24,29 +25,31 @@ def draw_text(text, font, text_col, x, y, screen):
 # bg = pygame.image.load('img/space.jpg')
 
 DIR = {
-    'u' : [0, -1], # north is -y
-    'd' : [0, 1],
-    'l' : [-1,0],
-    'r' : [1,0]
+    'u' : (0, -1), # north is -y
+    'd' : (0, 1),
+    'l' : (-1,0),
+    'r' : (1,0)
     }
 
-def draw_grid(surface):
+# drawing game surface
+def draw_grid(surface, walls):
     for y in range(0, HEIGHT):
         for x in range(0, WIDTH):
             r = pygame.Rect((x * SIZE, y * SIZE), (SIZE, SIZE))
-            if (x+y) % 2 == 0:
+            if (x, y) in walls:
                color = (255,255,255)
             else:
-               color = (200,200,200)
-            pygame.draw.rect(surface, (255,255,255), r)
+               color = (0,0,0)
+            pygame.draw.rect(surface, color, r)
 
+# moving obstacle class
 class Obstacle(object):
     def __init__(self, x, y, vel):
         self.vel = vel
-        self.position = [x, y]
+        self.position = (x, y)
 
     def update(self):
-        self.position[0] += self.vel
+        self.position = tuple(map(operator.add, self.position, (self.vel, 0)))
         if self.position[0] > 40 or self.position[0] < 20:
             self.vel = -self.vel
 
@@ -54,10 +57,14 @@ class Obstacle(object):
         r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
         pygame.draw.rect(surface, green, r)
 
+    def get_position(self):
+        return self.position
+
+# player class
 class Player(object):
 
     def __init__(self, x, y):
-        self.position = [x, y]
+        self.position = (x, y)
         pass
 
     def get_position(self):
@@ -67,17 +74,30 @@ class Player(object):
         self.position = [x, y]
     
     def move(self, dir):
-        self.position[0] = self.position[0] + DIR[dir][0]                                                       
-        self.position[1] = self.position[1] + DIR[dir][1]
+        self.position = tuple(map(operator.add, self.position, DIR[dir]))
 
     def draw(self, surface):
         r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
         pygame.draw.rect(surface, red, r)
     
+# goal class
+class Goal(object):
+    def __init__ (self, x, y):
+        self.position = (x, y)
+
+    def draw(self, surface):
+        r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
+        pygame.draw.rect(surface, blue, r)
+
+    def get_position(self):
+        return self.position
+
+# ai agent class
 class Agent():
     def __init__(self):
-        super().__init__()
-    def make_move():
+        self.player = Player(0,0);
+
+    def move():
         i = int(np.random().random() * 4)
 
 
@@ -87,24 +107,32 @@ def main():
     clock = pygame.time.Clock()
     fps = 20
 
+    walls = []
+
+    for x in range(WIDTH):
+        walls.append((x, 0))
+        walls.append((x, HEIGHT-1))
+
+    for x in range(HEIGHT):
+        walls.append((0, x))
+        walls.append((WIDTH-1, x))
+
+    for x in range(HEIGHT-10):
+        walls.append((18, x))
+
+    for x in range(10, HEIGHT):
+        walls.append((42, x))
+
     screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
     pygame.display.set_caption('Worlds Hardest Game')
 
     surface = pygame.Surface(screen.get_size())
     surface = surface.convert()
-    draw_grid(surface)
+    draw_grid(surface, walls)
 
     player = Player(5, 5)
+    goal = Goal(55, 35)
 
-    walls = [
-        pygame.Rect(0,0,20,screen_height),
-        pygame.Rect(0,0,screen_width, 20),
-        pygame.Rect(0, screen_height-20, screen_width, 20),
-        pygame.Rect(screen_width-20, 0, 20, screen_height),
-        pygame.Rect(screen_width/3, 0, 20, screen_height-200),
-        pygame.Rect(screen_width * 2/3, 200, 20, screen_height - 200)
-    ]
-    
     vel_left = 1
     vel_right = -1
 
@@ -122,7 +150,7 @@ def main():
 
     # .Rect(x-coord, y-coord, width, height)
     #player = pygame.Rect(50, 50, 30, 30)
-    goal = pygame.Rect(1100, 50, 50, 50)
+    #goal = pygame.Rect(1100, 50, 50, 50)
 
     run = True
     alive = True
@@ -137,8 +165,9 @@ def main():
         #delay start of game by 10ms
         pygame.time.delay(10)
 
-        draw_grid(surface)
+        draw_grid(surface, walls)
         player.draw(surface)
+        goal.draw(surface)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -166,8 +195,8 @@ def main():
         #    if player.colliderect(wall):
         #        alive = False
 
-        #if player.colliderect(goal):
-        #    win = True
+        if player.get_position == goal.get_position:
+            win = True
 
         screen.fill(black)
 
