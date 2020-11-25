@@ -38,20 +38,19 @@ def draw_grid(surface):
                color = (255,255,255)
             else:
                color = (200,200,200)
-            pygame.draw.rect(surface, color, r)
+            pygame.draw.rect(surface, (255,255,255), r)
 
 class Obstacle(object):
     def __init__(self, x, y, vel):
-        super().__init__(x, y)
         self.vel = vel
         self.position = [x, y]
 
     def update(self):
         self.position[0] += self.vel
-        if self.right > screen_width * 2/3 or self.left < screen_width/3 + 20:
+        if self.position[0] > 40 or self.position[0] < 20:
             self.vel = -self.vel
 
-    def draw(self, x, y, surface):
+    def draw(self, surface):
         r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
         pygame.draw.rect(surface, green, r)
 
@@ -106,16 +105,16 @@ def main():
         pygame.Rect(screen_width * 2/3, 200, 20, screen_height - 200)
     ]
     
-    vel_left = 3
-    vel_right = -3
+    vel_left = 1
+    vel_right = -1
 
     obstacles = [
-        Obstacle(screen_width/3 + 20, 240, vel_left),
-        Obstacle(screen_width/3 + 20, 360, vel_left),
-        Obstacle(screen_width/3 + 20, 480, vel_left),
-        Obstacle(screen_width * 2/3 - 50, 300, vel_right),
-        Obstacle(screen_width * 2/3 - 50, 420, vel_right),
-        Obstacle(screen_width * 2/3 - 50, 540, vel_right),
+        Obstacle(31, 11, vel_left),
+        Obstacle(32, 12, vel_left),
+        Obstacle(33, 13, vel_left),
+        Obstacle(34, 14, vel_right),
+        Obstacle(35, 15, vel_right),
+        Obstacle(36, 16, vel_right),
     ]
 
     # define font
@@ -157,8 +156,8 @@ def main():
             player.move('d')
 
         ## collision with obstacle
-        #for obstacle in obstacles:
-        #    obstacle.update()
+        for obstacle in obstacles:
+            obstacle.update()
         #    if player.colliderect(obstacle):
         #        alive = False
 
@@ -179,8 +178,8 @@ def main():
         #    for wall in walls:
         #        pygame.draw.rect(screen, white, wall)
 
-        #    for obstacle in obstacles:
-        #        pygame.draw.rect(screen, green, obstacle)
+        for obstacle in obstacles:
+            obstacle.draw(surface)
 
         #else:
         #    if win:
