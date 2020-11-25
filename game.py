@@ -71,7 +71,7 @@ class Player(object):
         return self.position
 
     def set_position(self, x, y):
-        self.position = [x, y]
+        self.position = (x, y)
     
     def move(self, dir):
         self.position = tuple(map(operator.add, self.position, DIR[dir]))
@@ -165,10 +165,6 @@ def main():
         #delay start of game by 10ms
         pygame.time.delay(10)
 
-        draw_grid(surface, walls)
-        player.draw(surface)
-        goal.draw(surface)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -187,36 +183,33 @@ def main():
         ## collision with obstacle
         for obstacle in obstacles:
             obstacle.update()
-        #    if player.colliderect(obstacle):
-        #        alive = False
+            if player.get_position() == obstacle.get_position():
+                alive = False
 
-        ## collision with wall
-        #for wall in walls:
-        #    if player.colliderect(wall):
-        #        alive = False
+        # collision with wall
+        for wall in walls:
+            if player.get_position() == wall:
+                alive = False
 
-        if player.get_position == goal.get_position:
+        if player.get_position() == goal.get_position():
             win = True
 
-        screen.fill(black)
+        if alive == True and win == False:
+            draw_grid(surface, walls)
+            player.draw(surface)
+            goal.draw(surface)
 
-        #if alive == True and win == False:
-        #    #pygame.draw.rect(screen, red, player)
-        #    pygame.draw.rect(screen, blue, goal)
+            for obstacle in obstacles:
+                obstacle.draw(surface)
+            
+            screen.blit(surface, (0,0))
 
-        #    for wall in walls:
-        #        pygame.draw.rect(screen, white, wall)
-
-        for obstacle in obstacles:
-            obstacle.draw(surface)
-
-        #else:
-        #    if win:
-        #        draw_text("You Win!", font, white, 500, 20, screen)
-        #    else:
-        #        draw_text("Game Over", font, white, 500, 20, screen)
+        else:
+            if win:
+                draw_text("You Win!", font, white, 500, 20, screen)
+            else:
+                draw_text("Game Over", font, white, 500, 20, screen)
         
-        screen.blit(surface, (0,0))
         pygame.display.update()
         if not run:
             pygame.quit()
