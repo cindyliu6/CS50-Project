@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 import operator
+import random
 
 # define dimensions
 HEIGHT = 40
@@ -94,11 +95,25 @@ class Goal():
 
 # ai agent class
 class Agent():
-    def __init__(self):
-        self.player = Player(0,0);
+    def __init__(self, x, y):
+        self.player = Player(x,y);
 
-    def move():
-        i = int(np.random().random() * 4)
+    def move(self):
+        i = random.randint(0, 4)
+        if i == 0:
+            self.player.move('l')
+        elif i == 1:
+            self.player.move('r')
+        elif i == 2:
+            self.player.move('u')
+        else:
+            self.player.move('d')
+
+    def get_position(self):
+        return self.player.get_position()
+
+    def draw(self, surface):
+        self.player.draw(surface)
 
 
 def main():
@@ -130,7 +145,8 @@ def main():
     surface = surface.convert()
     draw_grid(surface, walls)
 
-    player = Player(5, 5)
+    #player = Player(5, 5)
+    player = Agent(5,10)
     goal = Goal(55, 35)
 
     vel_left = 1
@@ -170,15 +186,15 @@ def main():
                 run = False
 
         # move player using arrow keys
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and player.get_position()[0] > 0:
-            player.move('l')
-        if keys[pygame.K_RIGHT] and player.get_position()[0] < WIDTH - 1:
-            player.move('r')
-        if keys[pygame.K_UP] and player.get_position()[1] > 0:
-            player.move('u')
-        if keys[pygame.K_DOWN] and player.get_position()[1] < HEIGHT - 1:
-            player.move('d')
+        #keys = pygame.key.get_pressed()
+        #if keys[pygame.K_LEFT] and player.get_position()[0] > 0:
+        #    player.move('l')
+        #if keys[pygame.K_RIGHT] and player.get_position()[0] < WIDTH - 1:
+        #    player.move('r')
+        #if keys[pygame.K_UP] and player.get_position()[1] > 0:
+        #    player.move('u')
+        #if keys[pygame.K_DOWN] and player.get_position()[1] < HEIGHT - 1:
+        #    player.move('d')
 
         ## collision with obstacle
         for obstacle in obstacles:
@@ -195,6 +211,9 @@ def main():
             win = True
 
         if alive == True and win == False:
+            player.move()
+            print(player.get_position())
+
             draw_grid(surface, walls)
             player.draw(surface)
             goal.draw(surface)
