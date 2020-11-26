@@ -3,6 +3,8 @@ import numpy as np
 import operator
 import random
 
+# halloooo
+
 # define dimensions
 HEIGHT = 40
 WIDTH = 60
@@ -73,14 +75,14 @@ class Player():
 
     def set_position(self, x, y):
         self.position = (x, y)
-    
+
     def move(self, dir):
         self.position = tuple(map(operator.add, self.position, DIR[dir]))
 
     def draw(self, surface):
         r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
         pygame.draw.rect(surface, red, r)
-    
+
 # goal class
 class Goal():
     def __init__ (self, x, y):
@@ -172,7 +174,7 @@ def main():
     alive = True
     win = False
 
-    while run:  
+    while run:
         clock.tick(fps)
 
         #draw background
@@ -220,7 +222,7 @@ def main():
 
             for obstacle in obstacles:
                 obstacle.draw(surface)
-            
+
             screen.blit(surface, (0,0))
 
         else:
@@ -228,7 +230,7 @@ def main():
                 draw_text("You Win!", font, white, 500, 20, screen)
             else:
                 draw_text("Game Over", font, white, 500, 20, screen)
-        
+
         pygame.display.update()
         if not run:
             pygame.quit()
