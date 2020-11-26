@@ -3,8 +3,6 @@ import numpy as np
 import operator
 import random
 
-# halloooo
-
 # define dimensions
 HEIGHT = 40
 WIDTH = 60
