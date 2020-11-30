@@ -11,22 +11,23 @@ class Brain(object):
     def randomize(self):
         for i in range(self.size):
             randomAngle = random.random() * 2* math.pi
-            self.directions[i] = (5 * math.cos(randomAngle), 5 * math.sin(randomAngle))
+            self.directions[i] = (25 * math.cos(randomAngle), 25 * math.sin(randomAngle))
+
 
     def clone(self):
         clone = Brain(self.size)
         for i in range(self.size):
-            clone.directions[i] = self.directions[i]
+            clone.directions[i] = tuple(self.directions[i])
 
         return clone
 
     def mutate(self):
-        mutationRate = 0.05
+        mutationRate = 0.1
         for i in range(self.size):
             rand = random.random()
             if rand < mutationRate:
                 randomAngle = random.random() * 2*math.pi
-                self.directions[i] = (5 * math.cos(randomAngle), 5 * math.sin(randomAngle))
+                self.directions[i] = (25 * math.cos(randomAngle), 25 * math.sin(randomAngle))
 
 
         

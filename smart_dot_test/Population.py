@@ -2,10 +2,11 @@ from Dot import Dot
 import random
 
 class Population(object):
-    def __init__(self, size, goalx, goaly):
+    def __init__(self, size, goalx, goaly, brainsize):
         self.dots = []
+        self.brainsize = brainsize
         for i in range(size):
-            self.dots.append(Dot(800,800))
+            self.dots.append(Dot(800,600, self.brainsize))
         self.goalx = goalx
         self.goaly = goaly
         self.gen = 1
@@ -27,6 +28,10 @@ class Population(object):
     def calculateFitness(self):
         for dot in self.dots:
             dot.calculateFitness(self.goalx, self.goaly)
+        
+        print("COORDS---------------------------------------------------")
+        print(self.goalx)
+        print(self.goaly)
 
     def allDotsDead(self):
         for dot in self.dots:
@@ -55,14 +60,20 @@ class Population(object):
             self.fitnessSum += dot.fitness
 
     def selectParent(self):
-        rand = random.random() * self.fitnessSum 
+        rand = random.random() * self.fitnessSum - 1
         runningSum = 0
 
         for dot in self.dots:
-            runningSum += dot.fitness
+            if (dot.fitness > 0):
+                runningSum += dot.fitness
+
+            else:
+                runningSum += 0.001
             if runningSum > rand:
                 return dot
-        return self.dots[0]
+
+        return self.dots[round(rand)]
+
 
     def mutateBabies(self):
         for dot in self.dots:
@@ -75,6 +86,8 @@ class Population(object):
             if self.dots[i].fitness > max:
                 max = self.dots[i].fitness
                 maxIndex = i
+                print("-----------------------BEST FOUND--------------------------")
+            print(self.dots[i].fitness)
 
         bestDot = maxIndex
 

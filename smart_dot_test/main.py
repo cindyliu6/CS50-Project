@@ -9,7 +9,7 @@ clock = pygame.time.Clock()
 fps = 60
 
 screen_width = 800
-screen_height = 800
+screen_height = 600
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Worlds Hardest Game')
@@ -27,7 +27,7 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 
 run = True
-population = Population(100, 625, 75)
+population = Population(100, 625, 75, 500)
 
 while run:
 	clock.tick(fps)
