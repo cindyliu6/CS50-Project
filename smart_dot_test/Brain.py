@@ -10,7 +10,7 @@ class Brain(object):
 
     def randomize(self):
         for i in range(self.size):
-            randomAngle = random.randrange(0, 2*math.pi)
+            randomAngle = random.randrange(0, 1) * 2* math.pi
             self.directions[i] = (math.cos(randomAngle), math.sin(randomAngle))
 
     def clone(self):

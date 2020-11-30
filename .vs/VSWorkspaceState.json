@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\smart_dot_test",
+    "\\test"
   ],
-  "SelectedNode": "\\game.py",
+  "SelectedNode": "\\test\\game_test.py",
   "PreviewInSolutionExplorer": false
 }

@@ -304,14 +304,14 @@ def run(params):
 
             #display(game)
             #update_screen()
-            pygame.time.wait(5)
+            pygame.time.wait(1)
 
         game_count += 1
         
         agent.model.save_weights(params['weights_path'])
         
         print(f'Game {game_count}      Score: {game.get_score()}')
-        pygame.time.wait(500)
+        pygame.time.wait(5)
    
 
 def main():

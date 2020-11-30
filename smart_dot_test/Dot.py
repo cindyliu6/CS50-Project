@@ -1,14 +1,15 @@
-import Brain
+from Brain import Brain
 import operator
+import math
 
 class Dot(object):
     def __init__(self, w, h):
         self.brain = Brain(1000)
-        pos = (w/2, h - 10)
+        self.pos = (w/2, h - 10)
         self.w = w
         self.h = h
-        vel = (0,0)
-        acc = (0,0)
+        self.vel = (0,0)
+        self.acc = (0,0)
         self.dead = False
         self.reachedGoal = False
         self.isBest = False
