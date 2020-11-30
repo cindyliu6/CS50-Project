@@ -1,11 +1,12 @@
 from Brain import Brain
 import operator
 import math
+import pygame
 
 class Dot(object):
     def __init__(self, w, h):
         self.brain = Brain(1000)
-        self.pos = (w/2, h - 10)
+        self.pos = (w/2, h/2)
         self.w = w
         self.h = h
         self.vel = (0,0)
@@ -15,10 +16,15 @@ class Dot(object):
         self.isBest = False
         self.fitness = 0
 
-    def show(self):
-        if self.isBest:
-            print("woo!")
+    def show(self, screen):
+        pygame.draw.rect(screen, (255,0,0), (self.pos[0] - 10, self.pos[1] - 10, 20, 20))
 
+
+    def pos_x(self):
+        return round(self.pos[0])
+
+    def pos_y(self):
+        return round(self.pos[1])
 
     def move(self):
         if self.brain.size > self.brain.step:
@@ -37,7 +43,7 @@ class Dot(object):
             self.move()
             if self.pos[0] < 2 or self.pos[1] < 2 or self.pos[0] > self.w-2 or self.pos[1] > self.h - 2:
                 self.dead = True
-            elif math.sqrt((goalx - self.pos[0]) * (goalx - self.pos[0]) + (goaly - self.pos[1]) * (goaly - self.pos[1])) < 5:
+            elif math.sqrt((goalx - self.pos[0]) * (goalx - self.pos[0]) + (goaly - self.pos[1]) * (goaly - self.pos[1])) < 10:
                 self.reachedGoal = True
             elif self.pos[0] < 600 and self.pos[1] < 310 and self.pos[0] > 0 and self.pos[1] > 300:
                 self.dead = True

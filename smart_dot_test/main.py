@@ -26,7 +26,7 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 
 run = True
-population = Population(1000, 625, 75)
+population = Population(100, 625, 75)
 
 while run:
 	clock.tick(fps)
@@ -40,9 +40,7 @@ while run:
 
 	# pygame.draw.rect(screen, red, player)
 	pygame.draw.rect(screen, blue, goal)
-	pygame.time.wait(200)
-
-
+	pygame.time.wait(2)
 
 	allDead = population.allDotsDead() ### do I have to pass in self? ### confused about calling functions from classes in diff files
 	if allDead:
@@ -50,8 +48,11 @@ while run:
 		population.naturalSelection()
 		population.mutateBabies()
 	else:
+		#for dot in population.dots:
+		#	#print("(" + str(dot.pos_x()) + ", " + str(dot.pos_y()) + ") ")
+		#	pygame.draw.rect(screen, red, (dot.pos_x(), dot.pos_y(), 20, 20))
 		population.update()
-		population.show()
+		population.show(screen)
 
 	pygame.display.update()
 pygame.quit()

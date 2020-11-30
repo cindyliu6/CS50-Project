@@ -13,9 +13,9 @@ class Population(object):
         self.minStep = 1000
         self.fitnessSum = 0
 
-    def show(self):
+    def show(self, screen):
         for dot in self.dots:
-            dot.show()
+            dot.show(screen)
 
     def update(self):
         for dot in self.dots:
@@ -26,7 +26,7 @@ class Population(object):
 
     def calculateFitness(self):
         for dot in self.dots:
-            dot.calculateFitness()
+            dot.calculateFitness(self.goalx, self.goaly)
 
     def allDotsDead(self):
         for dot in self.dots:
@@ -39,7 +39,7 @@ class Population(object):
         self.setBestDot()
         self.calculateFitnessSum()
 
-        newDots.append(self.dots[bestDot].makeBaby())
+        newDots.append(self.dots[self.bestDot].makeBaby())
         newDots[0].isBest = True
 
         for i in range(len(self.dots) - 1):
@@ -47,7 +47,7 @@ class Population(object):
             newDots.append(parent.makeBaby())
 
         for i in range(len(self.dots)):
-            dots[i] = newDots[i]
+            self.dots[i] = newDots[i]
         self.gen += 1
 
     def calculateFitnessSum(self):
@@ -55,7 +55,7 @@ class Population(object):
             self.fitnessSum += dot.fitness
 
     def selectParent(self):
-        rand = random.randrange(0, self.fitnessSum)
+        rand = random.randrange(0, 1) * self.fitnessSum
         runningSum = 0
 
         for dot in self.dots:
