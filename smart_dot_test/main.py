@@ -27,7 +27,7 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 
 run = True
-population = Population(100, 625, 75, 500)
+population = Population(100, 625, 75, 1000)
 
 while run:
 	clock.tick(fps)

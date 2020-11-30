@@ -66,7 +66,7 @@ class Dot(object):
             self.fitness = 1000/dist
 
     def makeBaby(self):
-        baby = Dot(self.w, self.h, self.brainsize + 200)
+        baby = Dot(self.w, self.h, self.brainsize)
         baby.brain = self.brain.clone()
         return baby
 
