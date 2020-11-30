@@ -55,14 +55,14 @@ class Population(object):
             self.fitnessSum += dot.fitness
 
     def selectParent(self):
-        rand = random.randrange(0, 1) * self.fitnessSum
+        rand = random.random() * self.fitnessSum 
         runningSum = 0
 
         for dot in self.dots:
             runningSum += dot.fitness
             if runningSum > rand:
                 return dot
-        return None
+        return self.dots[0]
 
     def mutateBabies(self):
         for dot in self.dots:
@@ -80,4 +80,4 @@ class Population(object):
 
         if self.dots[bestDot].reachedGoal:
             self.minStep = self.dots[bestDot].brain.step
-            print("step: " + minStep)
+            print("step: " + self.minStep)

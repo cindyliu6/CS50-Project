@@ -17,6 +17,7 @@ pygame.display.set_caption('Worlds Hardest Game')
 # .Rect(x-coord, y-coord, width, height)
 # player = pygame.Rect(50, 50, 30, 30)
 goal = pygame.Rect(600, 50, 50, 50)
+wall = pygame.Rect(0, 300, 600, 10)
 
 # define common colors
 black = (0, 0, 0)
@@ -40,6 +41,7 @@ while run:
 
 	# pygame.draw.rect(screen, red, player)
 	pygame.draw.rect(screen, blue, goal)
+	pygame.draw.rect(screen, white, wall)
 	pygame.time.wait(2)
 
 	allDead = population.allDotsDead() ### do I have to pass in self? ### confused about calling functions from classes in diff files

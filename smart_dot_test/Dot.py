@@ -6,7 +6,7 @@ import pygame
 class Dot(object):
     def __init__(self, w, h):
         self.brain = Brain(1000)
-        self.pos = (w/2, h/2)
+        self.pos = (w/2, h/ 4 * 3)
         self.w = w
         self.h = h
         self.vel = (0,0)
@@ -34,8 +34,8 @@ class Dot(object):
 
         self.vel = tuple(map(operator.add, self.vel, self.acc))
         mag = self.vel[0] * self.vel[0] + self.vel[1] * self.vel[1]
-        if mag > 5:
-            self.vel = tuple(i * 5 / mag for i in self.vel)
+        if mag > 10:
+            self.vel = tuple(i * 10 / mag for i in self.vel)
         self.pos = tuple(map(operator.add, self.pos, self.vel))
         
     def update(self, goalx, goaly):
@@ -43,7 +43,7 @@ class Dot(object):
             self.move()
             if self.pos[0] < 2 or self.pos[1] < 2 or self.pos[0] > self.w-2 or self.pos[1] > self.h - 2:
                 self.dead = True
-            elif math.sqrt((goalx - self.pos[0]) * (goalx - self.pos[0]) + (goaly - self.pos[1]) * (goaly - self.pos[1])) < 10:
+            elif math.sqrt((goalx - self.pos[0]) * (goalx - self.pos[0]) + (goaly - self.pos[1]) * (goaly - self.pos[1])) < 5:
                 self.reachedGoal = True
             elif self.pos[0] < 600 and self.pos[1] < 310 and self.pos[0] > 0 and self.pos[1] > 300:
                 self.dead = True
