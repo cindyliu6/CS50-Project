@@ -1,4 +1,7 @@
 import pygame
+import Brain
+import Dot
+import Population
 
 pygame.init()
 
@@ -12,7 +15,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Worlds Hardest Game')
 
 # .Rect(x-coord, y-coord, width, height)
-player = pygame.Rect(50, 50, 30, 30)
+# player = pygame.Rect(50, 50, 30, 30)
 goal = pygame.Rect(600, 50, 50, 50)
 
 # define common colors
@@ -33,8 +36,17 @@ while run:
 
 	screen.fill(black)
 
-	pygame.draw.rect(screen, red, player)
+	# pygame.draw.rect(screen, red, player)
 	pygame.draw.rect(screen, blue, goal)
+
+	allDead = Population.allDotsDead() ### do I have to pass in self? ### confused about calling functions from classes in diff files
+	if allDead:
+		population.calculateFitness()
+		population.naturalSelection()
+		population.mutateBabies()
+	else:
+		dot.update()
+		dot.show()
 
 	pygame.display.update()
 pygame.quit()
