@@ -1,5 +1,6 @@
 from Dot import Dot
 import random
+import pygame
 
 class Population(object):
     def __init__(self, size, goalx, goaly, brainsize):
@@ -15,8 +16,8 @@ class Population(object):
         self.fitnessSum = 0
 
     def show(self, screen):
-        for dot in self.dots:
-            dot.show(screen)
+        for i in range(len(self.dots)):
+            self.dots[i].show(screen, i)
 
     def update(self):
         for dot in self.dots:
@@ -54,25 +55,23 @@ class Population(object):
         for i in range(len(self.dots)):
             self.dots[i] = newDots[i]
         self.gen += 1
+        pygame.time.wait(5000)
 
     def calculateFitnessSum(self):
+        self.fitnessSum = 0
         for dot in self.dots:
             self.fitnessSum += dot.fitness
 
     def selectParent(self):
-        rand = random.random() * self.fitnessSum - 1
+        rand = random.random() * self.fitnessSum
         runningSum = 0
 
-        for dot in self.dots:
-            if (dot.fitness > 0):
-                runningSum += dot.fitness
-
-            else:
-                runningSum += 0.001
+        for i in range(len(self.dots)):
+            runningSum += self.dots[i].fitness
             if runningSum > rand:
-                return dot
+                return self.dots[i]
 
-        return self.dots[round(rand)]
+        return self.dots[self.bestDot]
 
 
     def mutateBabies(self):
@@ -86,11 +85,11 @@ class Population(object):
             if self.dots[i].fitness > max:
                 max = self.dots[i].fitness
                 maxIndex = i
-                print("-----------------------BEST FOUND--------------------------")
-            print(self.dots[i].fitness)
+        #    print(str(i) + ": " + str(self.dots[i].fitness))
+        #print('----------------------------------------------------------------')
 
         bestDot = maxIndex
 
         if self.dots[bestDot].reachedGoal:
             self.minStep = self.dots[bestDot].brain.step
-            print("step: " + self.minStep)
+            print("step: " + str(self.minStep))

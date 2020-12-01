@@ -22,7 +22,7 @@ class Brain(object):
         return clone
 
     def mutate(self):
-        mutationRate = 0.1
+        mutationRate = 0.02
         for i in range(self.size):
             rand = random.random()
             if rand < mutationRate:
