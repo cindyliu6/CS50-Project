@@ -18,24 +18,24 @@ class Dot(object):
         self.fitness = 0
         self.dead_early = False
 
-    def show(self, screen, i):
+    def show(self, screen):
         color = (255,0,0)
-        if i == 1:
-            color = (0, 0, 255)
-        elif i == 2:
-            color = (255,255,0)
-        elif i == 3:
-            color = (0,255,255)
+        # if i == 1:
+        #     color = (0, 0, 255)
+        # elif i == 2:
+        #     color = (255,255,0)
+        # elif i == 3:
+        #     color = (0,255,255)
         if self.isBest:
             color = (0, 255, 0)
         pygame.draw.rect(screen, color, (self.pos[0] - 10, self.pos[1] - 10, 20, 20))
 
 
-    def pos_x(self):
-        return round(self.pos[0])
-
-    def pos_y(self):
-        return round(self.pos[1])
+    # def pos_x(self):
+    #     return round(self.pos[0])
+    #
+    # def pos_y(self):
+    #     return round(self.pos[1])
 
     def move(self):
         if self.brain.size > self.brain.step:
@@ -49,7 +49,7 @@ class Dot(object):
         if mag > 45:
             self.vel = tuple(i * 45 / mag for i in self.vel)
         self.pos = tuple(map(operator.add, self.pos, self.vel))
-        
+
     def update(self, goalx, goaly):
         if not self.dead and not self.reachedGoal:
             self.move()
@@ -65,7 +65,7 @@ class Dot(object):
     def calculateFitness(self, goalx, goaly):
         if self.reachedGoal:
             self.fitness = 1/16 + 10000 /( self.brain.step * self.brain.step)
-        #elif self.dead_early:
+        # elif self.dead_early:
         #    self.fitness = -1
         else:
             dist = (goalx - self.pos[0]) * (goalx - self.pos[0]) + (goaly - self.pos[1]) * (goaly - self.pos[1])
@@ -75,7 +75,3 @@ class Dot(object):
         baby = Dot(self.w, self.h, self.brainsize)
         baby.brain = self.brain.clone()
         return baby
-
-
-
-

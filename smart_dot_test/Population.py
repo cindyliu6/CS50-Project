@@ -15,9 +15,14 @@ class Population(object):
         self.minStep = 1000
         self.fitnessSum = 0
 
+    # def show(self, screen):
+    #     for i in range(len(self.dots)):
+    #         self.dots[i].show(screen, i)  
+
     def show(self, screen):
-        for i in range(len(self.dots)):
-            self.dots[i].show(screen, i)
+        for dot in self.dots:
+            dot.show(screen)
+        self.dots[0].show(screen)  ### not sure if necessary?
 
     def update(self):
         for dot in self.dots:
@@ -29,7 +34,7 @@ class Population(object):
     def calculateFitness(self):
         for dot in self.dots:
             dot.calculateFitness(self.goalx, self.goaly)
-        
+
         print("COORDS---------------------------------------------------")
         print(self.goalx)
         print(self.goaly)
@@ -54,6 +59,7 @@ class Population(object):
 
         for i in range(len(self.dots)):
             self.dots[i] = newDots[i]
+
         self.gen += 1
         pygame.time.wait(5000)
 
@@ -70,7 +76,7 @@ class Population(object):
             runningSum += self.dots[i].fitness
             if runningSum > rand:
                 return self.dots[i]
-
+        print("weird...")
         return self.dots[self.bestDot]
 
 
@@ -88,8 +94,8 @@ class Population(object):
         #    print(str(i) + ": " + str(self.dots[i].fitness))
         #print('----------------------------------------------------------------')
 
-        bestDot = maxIndex
+        self.bestDot = maxIndex
 
-        if self.dots[bestDot].reachedGoal:
-            self.minStep = self.dots[bestDot].brain.step
+        if self.dots[self.bestDot].reachedGoal:
+            self.minStep = self.dots[self.bestDot].brain.step
             print("step: " + str(self.minStep))
