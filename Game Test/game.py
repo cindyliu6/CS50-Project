@@ -2,6 +2,7 @@ import pygame
 import numpy as np
 import operator
 import random
+from Population import Population
 
 # define dimensions
 HEIGHT = 40
@@ -141,9 +142,7 @@ def main():
     screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
     pygame.display.set_caption('Worlds Hardest Game')
 
-    surface = pygame.Surface(screen.get_size())
-    surface = surface.convert()
-    draw_grid(surface, walls)
+    draw_grid(screen, walls)
 
     #player = Player(5, 5)
     player = Agent(5,10)
@@ -152,25 +151,33 @@ def main():
     vel_left = 1
     vel_right = -1
 
-    obstacles = [
-        Obstacle(31, 11, vel_left),
-        Obstacle(32, 12, vel_left),
-        Obstacle(33, 13, vel_left),
-        Obstacle(34, 14, vel_right),
-        Obstacle(35, 15, vel_right),
-        Obstacle(36, 16, vel_right),
+    obstacles = [[
+            Obstacle(31, 11, vel_left),
+            Obstacle(32, 12, vel_left),
+            Obstacle(33, 13, vel_left),
+            Obstacle(34, 14, vel_right),
+            Obstacle(35, 15, vel_right),
+            Obstacle(36, 16, vel_right)
+        ],
+        [
+            (31, 11),
+            (32,12),
+            (33,13),
+            (34,14),
+            (35,15),
+            (36,16)
+            ]
     ]
 
     # define font
     font = pygame.font.SysFont('Bauhaus 93', 60)
 
-    # .Rect(x-coord, y-coord, width, height)
-    #player = pygame.Rect(50, 50, 30, 30)
-    #goal = pygame.Rect(1100, 50, 50, 50)
-
     run = True
     alive = True
     win = False
+
+    population = Population(10, 55, 35, 1000)
+    
 
     while run:
         clock.tick(fps)
@@ -185,51 +192,27 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
-        # move player using arrow keys
-        #keys = pygame.key.get_pressed()
-        #if keys[pygame.K_LEFT] and player.get_position()[0] > 0:
-        #    player.move('l')
-        #if keys[pygame.K_RIGHT] and player.get_position()[0] < WIDTH - 1:
-        #    player.move('r')
-        #if keys[pygame.K_UP] and player.get_position()[1] > 0:
-        #    player.move('u')
-        #if keys[pygame.K_DOWN] and player.get_position()[1] < HEIGHT - 1:
-        #    player.move('d')
 
-        ## collision with obstacle
-        for obstacle in obstacles:
-            obstacle.update()
-            if player.get_position() == obstacle.get_position():
-                alive = False
+        draw_grid(screen, walls)
 
-        # collision with wall
-        for wall in walls:
-            if player.get_position() == wall:
-                alive = False
+        for i in range(len(obstacles[0])):
+            obstacles[0][i].update()
+            obstacles[1][i] = obstacles[0][i].get_position()
 
-        if player.get_position() == goal.get_position():
-            win = True
+        pygame.time.wait(2)
 
-        if alive == True and win == False:
-            player.move()
-            print(player.get_position())
-
-            draw_grid(surface, walls)
-            player.draw(surface)
-            goal.draw(surface)
-
-            for obstacle in obstacles:
-                obstacle.draw(surface)
-
-            screen.blit(surface, (0,0))
-
+        allDead = population.allDotsDead() 
+        if allDead:
+            population.calculateFitness()
+            population.naturalSelection()
+            population.mutateBabies()
         else:
-            if win:
-                draw_text("You Win!", font, white, 500, 20, screen)
-            else:
-                draw_text("Game Over", font, white, 500, 20, screen)
+            population.update(walls, obstacles[1])
+            population.show(screen)
 
+        print("update")
         pygame.display.update()
+
         if not run:
             pygame.quit()
 
