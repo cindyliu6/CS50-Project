@@ -20,7 +20,10 @@ class Dot(object):
         color = (255,0,0)
 
         if self.isBest:
-            color = (0, 255, 0)
+            color = (0, 0, 255)
+        elif self.dead:
+            color = (100,100,100)
+
         pygame.draw.rect(screen, color, (self.pos[0]*15, self.pos[1]*15, 15, 15))
 
 
@@ -32,12 +35,11 @@ class Dot(object):
 
     def move(self):
         if self.brain.size > self.brain.step:
-            currVal = self.brain.directions[self.brain.step]
+            currVal = self.brain.directions[self.brain.step] 
+            self.pos = tuple(map(operator.add, self.pos, currVal))
             self.brain.step += 1
         else:
             self.dead = True
-
-        self.pos = tuple(map(operator.add, self.pos, currVal))
 
     def update(self, goalx, goaly, walls, obstacle_pos):
         if not self.dead and not self.reachedGoal:
@@ -45,7 +47,7 @@ class Dot(object):
             if self.pos in walls or self.pos in obstacle_pos:
                 self.dead = True
                 self.dead_early = True
-            elif self.pos[0] == goalx and pos[1] == self.goaly:
+            elif self.pos[0] == goalx and self.pos[1] == goaly:
                 self.reachedGoal = True
 
     def calculateFitness(self, goalx, goaly):

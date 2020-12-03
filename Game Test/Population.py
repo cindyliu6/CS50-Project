@@ -3,11 +3,11 @@ import random
 import pygame
 
 class Population(object):
-    def __init__(self, size, goalx, goaly, brainsize):
+    def __init__(self, size, startx, starty, goalx, goaly, brainsize):
         self.dots = []
         self.brainsize = brainsize
         for i in range(size):
-            self.dots.append(Dot(5,5, self.brainsize))
+            self.dots.append(Dot(startx,starty, self.brainsize))
         self.goalx = goalx
         self.goaly = goaly
         self.gen = 1

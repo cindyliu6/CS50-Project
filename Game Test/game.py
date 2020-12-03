@@ -10,6 +10,8 @@ WIDTH = 60
 SIZE = 15
 screen_width = WIDTH * SIZE
 screen_height = HEIGHT * SIZE
+START = (5, 5)
+END = (50, 35)
 
 # define common colors
 black = (0, 0, 0)
@@ -133,20 +135,19 @@ def main():
         walls.append((0, x))
         walls.append((WIDTH-1, x))
 
-    for x in range(HEIGHT-10):
-        walls.append((18, x))
+    #for x in range(HEIGHT-10):
+    #    walls.append((18, x))
 
-    for x in range(10, HEIGHT):
-        walls.append((42, x))
+    #for x in range(10, HEIGHT):
+    #    walls.append((42, x))
 
     screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
     pygame.display.set_caption('Worlds Hardest Game')
 
     draw_grid(screen, walls)
 
-    #player = Player(5, 5)
     player = Agent(5,10)
-    goal = Goal(55, 35)
+    goal = Goal(END[0], END[1])
 
     vel_left = 1
     vel_right = -1
@@ -176,7 +177,7 @@ def main():
     alive = True
     win = False
 
-    population = Population(10, 55, 35, 1000)
+    population = Population(100, START[0], START[1], END[0], END[1], 1000)
     
 
     while run:
@@ -194,12 +195,14 @@ def main():
 
 
         draw_grid(screen, walls)
+        goal.draw(screen)
 
         for i in range(len(obstacles[0])):
             obstacles[0][i].update()
+            obstacles[0][i].draw(screen)
             obstacles[1][i] = obstacles[0][i].get_position()
 
-        pygame.time.wait(2)
+        pygame.time.wait(1)
 
         allDead = population.allDotsDead() 
         if allDead:
@@ -210,7 +213,7 @@ def main():
             population.update(walls, obstacles[1])
             population.show(screen)
 
-        print("update")
+        #print("update")
         pygame.display.update()
 
         if not run:
