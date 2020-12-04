@@ -135,11 +135,11 @@ def main():
         walls.append((0, x))
         walls.append((WIDTH-1, x))
 
-    #for x in range(HEIGHT-10):
-    #    walls.append((18, x))
+    for x in range(HEIGHT-10):
+        walls.append((18, x))
 
-    #for x in range(10, HEIGHT):
-    #    walls.append((42, x))
+    for x in range(10, HEIGHT):
+        walls.append((42, x))
 
     screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
     pygame.display.set_caption('Worlds Hardest Game')
@@ -179,45 +179,101 @@ def main():
 
     population = Population(100, START[0], START[1], END[0], END[1], 1000)
     
+    homepage = True
+    gamemode = 0
 
-    while run:
+    while homepage:
         clock.tick(fps)
-
-        #draw background
-        # screen.blit(bg, (0,0))
-
-        #delay start of game by 10ms
-        pygame.time.delay(10)
+        
+        screen.fill(red)
+        pygame.draw.rect(screen, blue, (10, 10, 100, 100))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            homepage = False
+            gamemode = 1
+        elif keys[pygame.K_RIGHT]:
+            homepage = False
+            gamemode = 2
+        elif keys[pygame.K_UP]:
+            homepage = False
+            gamemode = 3
 
-        draw_grid(screen, walls)
-        goal.draw(screen)
-
-        for i in range(len(obstacles[0])):
-            obstacles[0][i].update()
-            obstacles[0][i].draw(screen)
-            obstacles[1][i] = obstacles[0][i].get_position()
-
-        pygame.time.wait(1)
-
-        allDead = population.allDotsDead() 
-        if allDead:
-            population.calculateFitness()
-            population.naturalSelection()
-            population.mutateBabies()
-        else:
-            population.update(walls, obstacles[1])
-            population.show(screen)
-
-        #print("update")
         pygame.display.update()
+    
+    print (gamemode)
+    if gamemode == 1:
+        player = Player (5,5)
 
-        if not run:
-            pygame.quit()
+        while run:
+            clock.tick(fps)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+
+            draw_grid(screen, walls)
+            goal.draw(screen)
+            player.draw(screen)
+
+            for i in range(len(obstacles[0])):
+                obstacles[0][i].update()
+                obstacles[0][i].draw(screen)
+
+            # move player using arrow keys
+            move = pygame.key.get_pressed()
+            if move[pygame.K_LEFT] and player.get_position()[0] > 0:
+                player.move('l')
+            if move[pygame.K_RIGHT] and player.get_position()[0] < WIDTH - 1:
+                player.move('r')
+            if move[pygame.K_UP] and player.get_position()[1] > 0:
+                player.move('u')
+            if move[pygame.K_DOWN] and player.get_position()[1] < HEIGHT - 1:
+                player.move('d')
+
+            print (player.get_position())
+
+            pygame.display.update()
+
+    elif gamemode == 2:
+        while run:
+            clock.tick(fps)
+
+            #delay start of game by 10ms
+            pygame.time.delay(10)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+
+            draw_grid(screen, walls)
+            goal.draw(screen)
+
+            for i in range(len(obstacles[0])):
+                obstacles[0][i].update()
+                obstacles[0][i].draw(screen)
+                obstacles[1][i] = obstacles[0][i].get_position()
+
+            pygame.time.wait(1)
+
+            allDead = population.allDotsDead() 
+            if allDead:
+                population.calculateFitness()
+                population.naturalSelection()
+                population.mutateBabies()
+            else:
+                population.update(walls, obstacles[1])
+                population.show(screen)
+
+            #print("update")
+            pygame.display.update()
+
+            if not run:
+                pygame.quit()
 
 if __name__ == "__main__":
     main()

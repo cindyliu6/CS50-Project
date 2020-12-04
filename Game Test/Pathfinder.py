@@ -1,2 +1,3 @@
-def find_path(w, h, walls, star, end):
-    
+def find_path(w, h, walls, start, end):
+    path = [start]
+
