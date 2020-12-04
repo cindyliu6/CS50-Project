@@ -172,6 +172,7 @@ def main():
 
     # define font
     font = pygame.font.SysFont('Bauhaus 93', 60)
+    homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
 
     run = True
     alive = True
@@ -182,31 +183,35 @@ def main():
     homepage = True
     gamemode = 0
 
+
     while homepage:
         clock.tick(fps)
         
-        screen.fill(red)
-        pygame.draw.rect(screen, blue, (10, 10, 100, 100))
+        
+        image = pygame.image.load('Game Test/homepage2.jpg')
+        pygame.draw.ellipse(image, red, (230, 265 + gamemode * 60, 20, 20))
+        draw_text("PLAY GAME", homepage_font, black, 280, 250, image)
+        draw_text("TRAIN COMPUTER", homepage_font, black, 280, 310, image)
+        draw_text("WATCH COMPUTER", homepage_font, black, 280, 370, image)
+
+        screen.blit(image, (0,0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            homepage = False
-            gamemode = 1
+        if keys[pygame.K_UP]:
+            gamemode = (gamemode - 1) % 3
+        elif keys[pygame.K_DOWN]:
+            gamemode = (gamemode + 1) % 3
         elif keys[pygame.K_RIGHT]:
             homepage = False
-            gamemode = 2
-        elif keys[pygame.K_UP]:
-            homepage = False
-            gamemode = 3
-
+        
         pygame.display.update()
-    
-    print (gamemode)
-    if gamemode == 1:
+        print (gamemode)
+
+    if gamemode == 0:
         player = Player (5,5)
 
         while run:
@@ -239,7 +244,7 @@ def main():
 
             pygame.display.update()
 
-    elif gamemode == 2:
+    elif gamemode == 1:
         while run:
             clock.tick(fps)
 
