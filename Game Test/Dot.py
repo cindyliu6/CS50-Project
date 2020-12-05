@@ -33,18 +33,20 @@ class Dot(object):
     # def pos_y(self):
     #     return round(self.pos[1])
 
-    def move(self):
+    def move(self, walls):
         if self.brain.size > self.brain.step:
             currVal = self.brain.directions[self.brain.step] 
-            self.pos = tuple(map(operator.add, self.pos, currVal))
+            nextStep = tuple(map(operator.add, self.pos, currVal))
+            if nextStep not in walls:
+                self.pos = nextStep
             self.brain.step += 1
         else:
             self.dead = True
 
     def update(self, goalx, goaly, walls, obstacle_pos):
         if not self.dead and not self.reachedGoal:
-            self.move()
-            if self.pos in walls or self.pos in obstacle_pos:
+            self.move(walls)
+            if self.pos in obstacle_pos:
                 self.dead = True
                 self.dead_early = True
             elif self.pos[0] == goalx and self.pos[1] == goaly:

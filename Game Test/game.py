@@ -209,7 +209,7 @@ def main():
 			homepage = False
 
 		pygame.display.update()
-		print (gamemode)
+		# print (gamemode)
 
 	if gamemode == 0:
 		player = Player (5,5)
@@ -217,7 +217,7 @@ def main():
 		def collisions(solids, x, y):
 			for solid in solids:
 				if player.get_position()[0] == solid[0] + x and player.get_position()[1] == solid[1] + y:
-						print("collision")
+						# print("collision")
 						return True
 			return False
 
@@ -229,7 +229,7 @@ def main():
 					run = False
 
 			if alive == True and win == False:
-				print (player.get_position())
+				# print (player.get_position())
 
 				draw_grid(screen, walls)
 				goal.draw(screen)
