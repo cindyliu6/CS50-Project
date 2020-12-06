@@ -3,6 +3,7 @@ import numpy as np
 import operator
 import random
 from Population import Population
+from Pathfinder import find_path
 
 # define dimensions
 HEIGHT = 40
@@ -36,15 +37,29 @@ DIR = {
 	}
 
 # drawing game surface
-def draw_grid(surface, walls):
+def draw_grid(surface, walls, path):
 	for y in range(0, HEIGHT):
 		for x in range(0, WIDTH):
 			r = pygame.Rect((x * SIZE, y * SIZE), (SIZE, SIZE))
 			if (x, y) in walls:
 			   color = (255,255,255)
+			elif (x,y) in path:
+				color = (0, 255, 255)
 			else:
 			   color = (0,0,0)
 			pygame.draw.rect(surface, color, r)
+
+def get_board(w, h, walls):
+	board =[]
+	for i in range(h):
+		row = []
+		for j in range(w):
+			if (j, i) in walls:
+				row.append(-1)
+			else:
+				row.append(0)
+		board.append(row)
+	return board
 
 # moving obstacle class
 class Obstacle():
@@ -96,29 +111,6 @@ class Goal():
 	def get_position(self):
 		return self.position
 
-# ai agent class
-class Agent():
-	def __init__(self, x, y):
-		self.player = Player(x,y);
-
-	def move(self):
-		i = random.randint(0, 4)
-		if i == 0:
-			self.player.move('l')
-		elif i == 1:
-			self.player.move('r')
-		elif i == 2:
-			self.player.move('u')
-		else:
-			self.player.move('d')
-
-	def get_position(self):
-		return self.player.get_position()
-
-	def draw(self, surface):
-		self.player.draw(surface)
-
-
 
 def main():
 	pygame.init()
@@ -145,9 +137,7 @@ def main():
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 	pygame.display.set_caption('Worlds Hardest Game')
 
-	draw_grid(screen, walls)
 
-	player = Agent(5,10)
 	goal = Goal(END[0], END[1])
 
 	vel_left = 1
@@ -183,6 +173,10 @@ def main():
 
 	homepage = True
 	gamemode = 0
+
+	board = get_board(WIDTH, HEIGHT, walls)
+	path = find_path(board, START, END)
+	print(path)
 
 	while homepage:
 		clock.tick(fps)
@@ -231,7 +225,7 @@ def main():
 			if alive == True and win == False:
 				# print (player.get_position())
 
-				draw_grid(screen, walls)
+				draw_grid(screen, walls, path)
 				goal.draw(screen)
 				player.draw(screen)
 
@@ -276,7 +270,7 @@ def main():
 				if event.type == pygame.QUIT:
 					run = False
 
-			draw_grid(screen, walls)
+			draw_grid(screen, walls, path)
 			goal.draw(screen)
 
 			for i in range(len(obstacles[0])):
