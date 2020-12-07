@@ -127,7 +127,7 @@ def main():
 	clock = pygame.time.Clock()
 	fps = 20
 
-	walls = pickle.load(open("Game Test/level_data/walls_1.dat", "rb"))
+	walls = pickle.load(open("Game Test/level_data/walls_2.dat", "rb"))
 	#walls = []
 
 	#for x in range(WIDTH):
@@ -153,7 +153,7 @@ def main():
 	vel_left = 1
 	vel_right = -1
 
-	obstacles = pickle.load(open("Game Test/level_data/obs_1.dat", "rb"))
+	obstacles = pickle.load(open("Game Test/level_data/obs_2.dat", "rb"))
 
 	#obstacles = [[
 	#		Obstacle(31, 11, vel_left),
@@ -183,7 +183,8 @@ def main():
 	board = get_board(WIDTH, HEIGHT, walls)
 	path = find_path(board, START, END)
 	# print(path)
-
+	
+	run = True
 
 	while homepage:
 		clock.tick(fps)
@@ -222,7 +223,6 @@ def main():
 			return False
 
 		level = 1
-		run = True
 		alive = True
 		win = False
 
@@ -232,7 +232,6 @@ def main():
 			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
 			board = get_board(WIDTH, HEIGHT, walls)
 			path = find_path(board, START, END)
-			print(level)
 
 			while run:
 				clock.tick(fps)
@@ -290,12 +289,9 @@ def main():
 					level = 100
 					pygame.quit()
 
-
-
-
 	else:
 		if gamemode == 1:
-			population = Population(100, START[0], START[1], END[0], END[1], 1000, path)
+			population = Population(100, START[0], START[1], END[0], END[1], 300, path)
 
 		elif gamemode == 2:
 			population = Population(1, START[0], START[1], END[0], END[1], 1000, path)
@@ -326,7 +322,7 @@ def main():
 				if allDead:
 					population.calculateFitness()
 					population.naturalSelection()
-					# population.save()
+					population.save(2)
 					population.mutateBabies()
 				else:
 					population.update(walls, obstacles[1])

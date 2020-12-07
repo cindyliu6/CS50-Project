@@ -65,14 +65,14 @@ class Population(object):
 
         pygame.time.wait(500)
 
-    def save(self):
+    def save(self, level):
         data = self.dots[0].brain.directions
-        pickle.dump(data, open("data.dat", "wb"))
-        print(data)
+        pickle.dump(data, open("data_" + str(level) + ".dat", "wb"))
+        # print(data)
 
-    def upload(self):
+    def upload(self, level):
         # loads saved data
-        self.dots[0].brain.directions = pickle.load(open("data.dat", "rb"))
+        self.dots[0].brain.directions = pickle.load(open("data_" + str(level) + ".dat", "rb"))
         print(self.dots[0].brain.directions)
 
     def calculateFitnessSum(self):
