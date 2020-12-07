@@ -23,6 +23,10 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 
+# define velocities
+vel_left = 1
+vel_right = -1
+
 # show text on screen (this probs is not the best way to do this...)
 def draw_text(text, font, text_col, x, y, screen):
 	img = font.render(text, True, text_col)
@@ -127,7 +131,6 @@ def main():
 	clock = pygame.time.Clock()
 	fps = 20
 
-	walls = pickle.load(open("Game Test/level_data/walls_2.dat", "rb"))
 	#walls = []
 
 	#for x in range(WIDTH):
@@ -144,16 +147,12 @@ def main():
 	#for x in range(10, HEIGHT):
 	#	walls.append((42, x))
 
-	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 	pygame.display.set_caption('Worlds Hardest Game')
 
 
 	goal = Goal(END[0], END[1])
-
-	vel_left = 1
-	vel_right = -1
-
-	obstacles = pickle.load(open("Game Test/level_data/obs_2.dat", "rb"))
+	
+	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 
 	#obstacles = [[
 	#		Obstacle(31, 11, vel_left),
@@ -179,9 +178,6 @@ def main():
 
 	homepage = True
 	gamemode = 0
-
-	board = get_board(WIDTH, HEIGHT, walls)
-	path = find_path(board, START, END)
 	# print(path)
 	
 	run = True
@@ -190,7 +186,7 @@ def main():
 		clock.tick(fps)
 
 
-		image = pygame.image.load('Game Test/homepage2.jpg')
+		image = pygame.image.load('Game Test/homepage.jpg')
 		pygame.draw.ellipse(image, red, (230, 265 + gamemode * 60, 20, 20))
 		draw_text("PLAY GAME", homepage_font, black, 280, 250, image)
 		draw_text("TRAIN COMPUTER", homepage_font, black, 280, 310, image)
@@ -290,6 +286,40 @@ def main():
 					pygame.quit()
 
 	else:
+		levelSelect = True
+		level = 0
+
+		while levelSelect:
+			clock.tick(fps)
+
+			image = pygame.image.load('Game Test/level_select.jpg')
+			pygame.draw.ellipse(image, red, (230, 265 + level * 60, 20, 20))
+			draw_text("LEVEL 1", homepage_font, black, 280, 250, image)
+			draw_text("LEVEL 2", homepage_font, black, 280, 310, image)
+			draw_text("LEVEL 3", homepage_font, black, 280, 370, image)
+
+			screen.blit(image, (0,0))
+
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					run = False
+
+			keys = pygame.key.get_pressed()
+			if keys[pygame.K_UP]:
+				level = (level - 1) % 3 
+			elif keys[pygame.K_DOWN]:
+				level = (level + 1) % 3 
+			elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
+				level += 1
+				levelSelect = False
+
+			pygame.display.update()
+		
+		walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
+		obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
+		board = get_board(WIDTH, HEIGHT, walls)
+		path = find_path(board, START, END)
+
 		if gamemode == 1:
 			population = Population(100, START[0], START[1], END[0], END[1], 300, path)
 
@@ -322,7 +352,7 @@ def main():
 				if allDead:
 					population.calculateFitness()
 					population.naturalSelection()
-					population.save(2)
+					# population.save(2)
 					population.mutateBabies()
 				else:
 					population.update(walls, obstacles[1])
