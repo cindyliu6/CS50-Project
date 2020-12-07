@@ -3,6 +3,7 @@ import numpy as np
 import operator
 import random
 from Population import Population
+from Pathfinder import find_path
 
 # define dimensions
 HEIGHT = 40
@@ -36,20 +37,35 @@ DIR = {
 	}
 
 # drawing game surface
-def draw_grid(surface, walls):
+def draw_grid(surface, walls, path):
 	for y in range(0, HEIGHT):
 		for x in range(0, WIDTH):
 			r = pygame.Rect((x * SIZE, y * SIZE), (SIZE, SIZE))
 			if (x, y) in walls:
 			   color = (255,255,255)
+			elif (x,y) in path:
+				color = (0, 255, 255)
 			else:
 			   color = (0,0,0)
 			pygame.draw.rect(surface, color, r)
 
+def get_board(w, h, walls):
+	board =[]
+	for i in range(h):
+		row = []
+		for j in range(w):
+			if (j, i) in walls:
+				row.append(-1)
+			else:
+				row.append(0)
+		board.append(row)
+	return board
+
 # moving obstacle class
 class Obstacle():
-	def __init__(self, x, y, vel, x_bound, x_bound2, y_bound, y_bound2):
-		self.vel = vel
+	def __init__(self, x, y, xvel, yvel, x_bound, x_bound2, y_bound, y_bound2):
+		self.xvel = xvel
+		self.yvel = yvel
 		self.position = (x, y)
 		self.xlimit = (x_bound)
 		self.xlimit2 = (x_bound2)
@@ -57,11 +73,11 @@ class Obstacle():
 		self.ylimit2 = (y_bound2)
 
 	def update(self):
-		self.position = tuple(map(operator.add, self.position, (self.vel, 0)))
+		self.position = tuple(map(operator.add, self.position, (self.xvel, self.yvel)))
 		if self.position[0] > self.xlimit or self.position[0] < self.xlimit2:
-			self.vel = -self.vel
+			self.xvel = -self.xvel
 		if self.position[1] > self.ylimit or self.position[1] < self.ylimit2:
-			self.vel = -self.vel
+			self.yvel = -self.yvel
 
 	def draw(self, surface):
 		r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
@@ -102,29 +118,6 @@ class Goal():
 	def get_position(self):
 		return self.position
 
-# ai agent class
-class Agent():
-	def __init__(self, x, y):
-		self.player = Player(x,y);
-
-	def move(self):
-		i = random.randint(0, 4)
-		if i == 0:
-			self.player.move('l')
-		elif i == 1:
-			self.player.move('r')
-		elif i == 2:
-			self.player.move('u')
-		else:
-			self.player.move('d')
-
-	def get_position(self):
-		return self.player.get_position()
-
-	def draw(self, surface):
-		self.player.draw(surface)
-
-
 
 def main():
 	pygame.init()
@@ -151,29 +144,29 @@ def main():
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 	pygame.display.set_caption('Worlds Hardest Game')
 
-	draw_grid(screen, walls)
 
-	player = Agent(5,10)
 	goal = Goal(END[0], END[1])
 
 	vel_left = 1
 	vel_right = -1
+	vel_up = -1
+	vel_down = 1
 
 	obstacles = [[
-			Obstacle(31, 11, vel_left, 40, 20, 10000, -100000),
-			Obstacle(32, 12, vel_left, 40, 20, 10000, -10000),
-			Obstacle(33, 13, vel_left, 40, 20, 10000, -10000),
-			Obstacle(34, 14, vel_right, 40, 20, 10000, -100000),
-			Obstacle(35, 15, vel_right, 40, 20, 10000, -10000),
-			Obstacle(36, 16, vel_right, 40, 20, 10000, -10000)
+			Obstacle(31, 11, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(32, 12, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(33, 13, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(34, 14, vel_right, 0, 40, 20, 10000, -100000),
+			Obstacle(35, 15, vel_right, 0, 40, 20, 10000, -100000),
+			Obstacle(36, 16, vel_right, 0, 40, 20, 10000, -100000),
 		],
 		[
 			(31, 11),
-			(32,12),
-			(33,13),
-			(34,14),
-			(35,15),
-			(36,16)
+			(32, 12),
+			(33, 13),
+			(34, 14),
+			(35, 15),
+			(36, 16)
 			]
 	]
 
@@ -185,10 +178,14 @@ def main():
 	alive = True
 	win = False
 
-	population = Population(100, START[0], START[1], END[0], END[1], 1000)
 
 	homepage = True
 	gamemode = 0
+
+	board = get_board(WIDTH, HEIGHT, walls)
+	path = find_path(board, START, END)
+	# print(path)
+
 
 	while homepage:
 		clock.tick(fps)
@@ -211,7 +208,7 @@ def main():
 			gamemode = (gamemode - 1) % 3
 		elif keys[pygame.K_DOWN]:
 			gamemode = (gamemode + 1) % 3
-		elif keys[pygame.K_RIGHT]:
+		elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
 			homepage = False
 
 		pygame.display.update()
@@ -237,7 +234,7 @@ def main():
 			if alive == True and win == False:
 				# print (player.get_position())
 
-				draw_grid(screen, walls)
+				draw_grid(screen, walls, path)
 				goal.draw(screen)
 				player.draw(screen)
 
@@ -272,6 +269,7 @@ def main():
 				pygame.quit()
 
 	elif gamemode == 1:
+		population = Population(100, START[0], START[1], END[0], END[1], 1000, path)
 		while run:
 			clock.tick(fps)
 
@@ -282,7 +280,7 @@ def main():
 				if event.type == pygame.QUIT:
 					run = False
 
-			draw_grid(screen, walls)
+			draw_grid(screen, walls, path)
 			goal.draw(screen)
 
 			for i in range(len(obstacles[0])):
@@ -306,6 +304,7 @@ def main():
 
 			if not run:
 				pygame.quit()
+
 
 if __name__ == "__main__":
 	main()

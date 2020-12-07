@@ -2,8 +2,6 @@ import pygame
 import numpy as np
 import operator
 import random
-import pickle
-import os
 from Population import Population
 from Pathfinder import find_path
 
@@ -127,22 +125,21 @@ def main():
 	clock = pygame.time.Clock()
 	fps = 20
 
-	walls = pickle.load(open("Game Test/level_data/walls_1.dat", "rb"))
-	#walls = []
+	walls = []
 
-	#for x in range(WIDTH):
-	#	walls.append((x, 0))
-	#	walls.append((x, HEIGHT-1))
+	for x in range(WIDTH):
+		walls.append((x, 0))
+		walls.append((x, HEIGHT-1))
 
-	#for x in range(HEIGHT):
-	#	walls.append((0, x))
-	#	walls.append((WIDTH-1, x))
+	for x in range(HEIGHT):
+		walls.append((0, x))
+		walls.append((WIDTH-1, x))
 
-	#for x in range(HEIGHT-10):
-	#	walls.append((18, x))
+	for x in range(HEIGHT-10):
+		walls.append((18, x))
 
-	#for x in range(10, HEIGHT):
-	#	walls.append((42, x))
+	for x in range(10, HEIGHT):
+		walls.append((42, x))
 
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 	pygame.display.set_caption('Worlds Hardest Game')
@@ -152,30 +149,66 @@ def main():
 
 	vel_left = 1
 	vel_right = -1
+	vel_up = -1
+	vel_down = 1
 
-	obstacles = pickle.load(open("Game Test/level_data/obs_1.dat", "rb"))
+	obstacles = [[
+			Obstacle(20, 9, 0, vel_down, 40, 20, 30, 9),
+			Obstacle(21, 9, 0, vel_down, 40, 20, 30, 9),
+			Obstacle(22, 9, 0, vel_down, 40, 20, 30, 9),
+			Obstacle(23, 9, 0, vel_down, 40, 20, 30, 9),
+			Obstacle(24, 9, 0, vel_down, 40, 20, 30, 9),
+			Obstacle(25, 9, 0, vel_down, 40, 20, 30, 9),
+            Obstacle(26, 9, 0, vel_down, 40, 20, 30, 9),
+            Obstacle(27, 9, 0, vel_down, 40, 20, 30, 9),
+            Obstacle(28, 9, 0, vel_down, 40, 20, 30, 9),
+            Obstacle(29, 9, 0, vel_down, 40, 20, 30, 9),
+            Obstacle(30, 9, 0, vel_down, 40, 20, 30, 9),
+            Obstacle(31, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(32, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(33, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(34, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(35, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(36, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(37, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(38, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(39, 30, 0, vel_up, 40, 20, 30, 9),
+            Obstacle(40, 30, 0, vel_up, 40, 20, 30, 9)
+		],
+		[
+			(20, 9),
+			(21, 9),
+			(22, 9),
+			(23, 9),
+			(24, 9),
+			(25, 9),
+            (26, 9),
+            (27, 9),
+            (28, 9),
+            (29, 9),
+            (30, 9),
+            (31, 30),
+            (32, 30),
+            (33, 30),
+            (34, 30),
+            (35, 30),
+            (36, 30),
+            (37, 30),
+            (38, 30),
+            (39, 30),
+            (40, 30)
 
-	#obstacles = [[
-	#		Obstacle(31, 11, vel_left),
-	#		Obstacle(32, 12, vel_left),
-	#		Obstacle(33, 13, vel_left),
-	#		Obstacle(34, 14, vel_right),
-	#		Obstacle(35, 15, vel_right),
-	#		Obstacle(36, 16, vel_right)
-	#	],
-	#	[
-	#		(31, 11),
-	#		(32,12),
-	#		(33,13),
-	#		(34,14),
-	#		(35,15),
-	#		(36,16)
-	#		]
-	#]
+			]
+	]
 
 	# define font
 	font = pygame.font.SysFont('Bauhaus 93', 60)
 	homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
+
+	run = True
+	alive = True
+	win = False
+
 
 	homepage = True
 	gamemode = 0
@@ -213,6 +246,7 @@ def main():
 		# print (gamemode)
 
 	if gamemode == 0:
+		player = Player (5,5)
 
 		def collisions(solids, x, y):
 			for solid in solids:
@@ -221,86 +255,52 @@ def main():
 						return True
 			return False
 
-		level = 1
-		run = True
-		alive = True
-		win = False
+		while run:
+			clock.tick(fps)
 
-		while level < 3:
-			player = Player (5,5)
-			obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
-			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
-			board = get_board(WIDTH, HEIGHT, walls)
-			path = find_path(board, START, END)
-			print(level)
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					run = False
 
-			while run:
-				clock.tick(fps)
+			if alive == True and win == False:
+				# print (player.get_position())
 
-				for event in pygame.event.get():
-					if event.type == pygame.QUIT:
-						level = 100
-						run = False
+				draw_grid(screen, walls, path)
+				goal.draw(screen)
+				player.draw(screen)
 
-				if alive == True and win == False:
+				for i in range(len(obstacles[0])):
+					obstacles[0][i].update()
+					obstacles[0][i].draw(screen)
+					if player.get_position() == obstacles[0][i].get_position():
+						alive = False
 
-					# move player using arrow keys
-					move = pygame.key.get_pressed()
-					if move[pygame.K_LEFT] and not collisions(walls, 1, 0):
-						player.move('l')
-					if move[pygame.K_RIGHT] and not collisions(walls, -1, 0):
-						player.move('r')
-					if move[pygame.K_UP] and not collisions(walls, 0, 1):
-						player.move('u')
-					if move[pygame.K_DOWN] and not collisions(walls, 0, -1):
-						player.move('d')
+				if player.get_position() == goal.get_position():
+					win = True
 
-					for i in range(len(obstacles[0])):
-						if player.get_position() == obstacles[0][i].get_position():
-							alive = False
-
-					draw_grid(screen, walls, path)
-					goal.draw(screen)
-					player.draw(screen)
-
-					for i in range(len(obstacles[0])):
-						obstacles[0][i].update()
-						obstacles[0][i].draw(screen)
-						if player.get_position() == obstacles[0][i].get_position():
-							alive = False
-
-					if player.get_position() == goal.get_position():
-						win = True
-
+			else:
+				if win:
+					draw_text("You Win!", font, white, 500, 20, screen)
 				else:
-					if win:
-						draw_text("You Win!", font, white, 500, 20, screen)
-						win = False
-						level += 1
-					else:
-						draw_text("Try Again", font, white, 500, 20, screen)
-						alive = True
-						
-					pygame.display.update()
-					pygame.time.wait(1000)
-					break
+					draw_text("Game Over", font, white, 500, 20, screen)
 
-				pygame.display.update()
-				if not run:
-					level = 100
-					pygame.quit()
+			# move player using arrow keys
+			move = pygame.key.get_pressed()
+			if move[pygame.K_LEFT] and not collisions(walls, 1, 0):
+				player.move('l')
+			if move[pygame.K_RIGHT] and not collisions(walls, -1, 0):
+				player.move('r')
+			if move[pygame.K_UP] and not collisions(walls, 0, 1):
+				player.move('u')
+			if move[pygame.K_DOWN] and not collisions(walls, 0, -1):
+				player.move('d')
 
+			pygame.display.update()
+			if not run:
+				pygame.quit()
 
-
-
-	else:
-		if gamemode == 1:
-			population = Population(100, START[0], START[1], END[0], END[1], 1000, path)
-
-		elif gamemode == 2:
-			population = Population(1, START[0], START[1], END[0], END[1], 1000, path)
-			population.upload()
-
+	elif gamemode == 1:
+		population = Population(100, START[0], START[1], END[0], END[1], 1000, path)
 		while run:
 			clock.tick(fps)
 
@@ -321,18 +321,12 @@ def main():
 
 			pygame.time.wait(1)
 
-			if gamemode == 1:
-				allDead = population.allDotsDead()
-				if allDead:
-					population.calculateFitness()
-					population.naturalSelection()
-					# population.save()
-					population.mutateBabies()
-				else:
-					population.update(walls, obstacles[1])
-					population.show(screen)
-
-			if gamemode == 2:
+			allDead = population.allDotsDead()
+			if allDead:
+				population.calculateFitness()
+				population.naturalSelection()
+				population.mutateBabies()
+			else:
 				population.update(walls, obstacles[1])
 				population.show(screen)
 
@@ -341,6 +335,7 @@ def main():
 
 			if not run:
 				pygame.quit()
+
 
 if __name__ == "__main__":
 	main()
