@@ -12,13 +12,13 @@ class Population(object):
         self.goaly = goaly
         self.gen = 1
         self.bestDot = 0
-        self.minStep = 1000
+        self.minStep = 500
         self.fitnessSum = 0
         self.path = path
 
     # def show(self, screen):
     #     for i in range(len(self.dots)):
-    #         self.dots[i].show(screen, i)  
+    #         self.dots[i].show(screen, i)
 
     def show(self, screen):
         for dot in self.dots:
@@ -58,7 +58,10 @@ class Population(object):
             self.dots[i] = newDots[i]
 
         self.gen += 1
-        pygame.time.wait(5000)
+        # if self.gen % 10 == 0:
+        #     self.minStep += 50
+
+        pygame.time.wait(500)
 
     def calculateFitnessSum(self):
         self.fitnessSum = 0
@@ -74,13 +77,15 @@ class Population(object):
             runningSum += self.dots[i].fitness
             if runningSum > rand:
                 return self.dots[i]
-        print("weird...")
+
         return self.dots[self.bestDot]
 
 
     def mutateBabies(self):
-        for dot in self.dots:
-            dot.brain.mutate()
+        # for dot in self.dots:
+        #     dot.brain.mutate()
+        for i in range(1, len(self.dots)):
+            self.dots[i].brain.mutate()             ### does this stop best dot from mutating?
 
     def setBestDot(self):
         max = 0

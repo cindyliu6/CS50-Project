@@ -35,7 +35,7 @@ class Dot(object):
 
     def move(self, walls):
         if self.brain.size > self.brain.step:
-            currVal = self.brain.directions[self.brain.step] 
+            currVal = self.brain.directions[self.brain.step]
             nextStep = tuple(map(operator.add, self.pos, currVal))
             if nextStep not in walls:
                 self.pos = nextStep

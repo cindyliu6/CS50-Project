@@ -6,7 +6,11 @@ DIR = [
     (1, 0),
     (-1, 0),
     (0, 1),
-    (0, -1)
+    (0, -1),
+    (1,1),
+    (1,-1),
+    (-1,1),
+    (-1,-1)
     ]
 
 class Brain(object):
@@ -18,7 +22,7 @@ class Brain(object):
 
     def randomize(self):
         for i in range(self.size):
-            randomVar = math.floor(random.random() * 5)
+            randomVar = math.floor(random.random() * 9)
             self.directions[i] = DIR[randomVar]
 
 
@@ -36,6 +40,3 @@ class Brain(object):
             if rand < mutationRate:
                 randomVar = math.floor(random.random() * 5)
                 self.directions[i] = DIR[randomVar]
-
-
-        

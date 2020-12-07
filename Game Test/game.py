@@ -2,8 +2,20 @@ import pygame
 import numpy as np
 import operator
 import random
+import pickle
+import os
 from Population import Population
 from Pathfinder import find_path
+
+
+data = ["hi", "testing", "bye"]
+
+# saves data
+pickle.dump(data, open("data.dat", "wb"))
+
+# loads saved data
+data2 = pickle.load(open("data.dat", "rb"))
+print(data2)
 
 # define dimensions
 HEIGHT = 40
@@ -176,7 +188,7 @@ def main():
 	board = get_board(WIDTH, HEIGHT, walls)
 	path = find_path(board, START, END)
 	# print(path)
-	
+
 
 	while homepage:
 		clock.tick(fps)
