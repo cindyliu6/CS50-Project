@@ -12,7 +12,7 @@ HEIGHT = 40
 WIDTH = 60
 SIZE = 15
 screen_width = WIDTH * SIZE
-screen_height = HEIGHT * SIZE
+screen_height = HEIGHT * SIZE + 50
 START = (5, 5)
 END = (50, 35)
 
