@@ -3,7 +3,7 @@ import random
 import pygame
 
 class Population(object):
-    def __init__(self, size, startx, starty, goalx, goaly, brainsize):
+    def __init__(self, size, startx, starty, goalx, goaly, brainsize, path):
         self.dots = []
         self.brainsize = brainsize
         for i in range(size):
@@ -14,6 +14,7 @@ class Population(object):
         self.bestDot = 0
         self.minStep = 1000
         self.fitnessSum = 0
+        self.path = path
 
     # def show(self, screen):
     #     for i in range(len(self.dots)):
@@ -33,7 +34,7 @@ class Population(object):
 
     def calculateFitness(self):
         for dot in self.dots:
-            dot.calculateFitness(self.goalx, self.goaly)
+            dot.calculateFitness(self.goalx, self.goaly, self.path)
 
     def allDotsDead(self):
         for dot in self.dots:
@@ -63,6 +64,7 @@ class Population(object):
         self.fitnessSum = 0
         for dot in self.dots:
             self.fitnessSum += dot.fitness
+        print("Generation " + str(self.gen) + ": " + str(self.fitnessSum))
 
     def selectParent(self):
         rand = random.random() * self.fitnessSum

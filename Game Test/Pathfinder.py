@@ -12,7 +12,6 @@ def find_path(board, start, end):
     start_y = start[0]
     board[start_x][start_y] = 1
     
-    print("HERE 1")
 
     while queue:
         tile = queue.pop(0)
@@ -41,7 +40,6 @@ def find_path(board, start, end):
             board[x][y-1] = currVal + 1
             queue.append((y-1, x))
 
-    print("HERE 2")
     path_not_found = True
 
     while path_not_found:
@@ -70,7 +68,7 @@ def find_path(board, start, end):
 
         if board[end_x][end_y] == 1:
             path_not_found = False
-            print("YAY!")
+
         
     path.reverse()
     return path

@@ -169,14 +169,14 @@ def main():
 	alive = True
 	win = False
 
-	population = Population(100, START[0], START[1], END[0], END[1], 1000)
 
 	homepage = True
 	gamemode = 0
 
 	board = get_board(WIDTH, HEIGHT, walls)
 	path = find_path(board, START, END)
-	print(path)
+	# print(path)
+	
 
 	while homepage:
 		clock.tick(fps)
@@ -199,7 +199,7 @@ def main():
 			gamemode = (gamemode - 1) % 3
 		elif keys[pygame.K_DOWN]:
 			gamemode = (gamemode + 1) % 3
-		elif keys[pygame.K_RIGHT]:
+		elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
 			homepage = False
 
 		pygame.display.update()
@@ -260,6 +260,7 @@ def main():
 				pygame.quit()
 
 	elif gamemode == 1:
+		population = Population(100, START[0], START[1], END[0], END[1], 1000, path)
 		while run:
 			clock.tick(fps)
 
@@ -294,6 +295,7 @@ def main():
 
 			if not run:
 				pygame.quit()
+
 
 if __name__ == "__main__":
 	main()

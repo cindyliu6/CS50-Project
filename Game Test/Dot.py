@@ -52,12 +52,22 @@ class Dot(object):
             elif self.pos[0] == goalx and self.pos[1] == goaly:
                 self.reachedGoal = True
 
-    def calculateFitness(self, goalx, goaly):
+    def calculateFitness(self, goalx, goaly, path):
         if self.reachedGoal:
-            self.fitness = 1/16 + 10000 /( self.brain.step * self.brain.step)
+            self.fitness = 1 + 10000 /( self.brain.step * self.brain.step)
         else:
-            dist = (goalx - self.pos[0]) * (goalx - self.pos[0]) + (goaly - self.pos[1]) * (goaly - self.pos[1])
-            self.fitness = 1/dist
+            min_dist = 10000
+            index = -1
+            for i in range(len(path)):
+                dist = abs((self.pos[0] - path[i][0])) + abs((self.pos[1] - path[i][1]))
+                if dist <= min_dist:
+                    index = i
+                    min_dist = dist
+
+            total_dist = min_dist + (len(path) - index) * 3
+            self.fitness = 1/(total_dist * total_dist)
+            #if self.dead_early:
+            #    self.fitness *= 0.8
 
     def makeBaby(self):
         baby = Dot(self.w, self.h, self.brainsize)
