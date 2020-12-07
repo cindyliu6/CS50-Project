@@ -7,16 +7,6 @@ import os
 from Population import Population
 from Pathfinder import find_path
 
-
-data = ["hi", "testing", "bye"]
-
-# saves data
-pickle.dump(data, open("data.dat", "wb"))
-
-# loads saved data
-data2 = pickle.load(open("data.dat", "rb"))
-print(data2)
-
 # define dimensions
 HEIGHT = 40
 WIDTH = 60
@@ -271,8 +261,14 @@ def main():
 			if not run:
 				pygame.quit()
 
-	elif gamemode == 1:
-		population = Population(100, START[0], START[1], END[0], END[1], 1000, path)
+	else:
+		if gamemode == 1:
+			population = Population(100, START[0], START[1], END[0], END[1], 1000, path)
+
+		elif gamemode == 2:
+			population = Population(1, START[0], START[1], END[0], END[1], 1000, path)
+			population.upload()
+
 		while run:
 			clock.tick(fps)
 
@@ -293,12 +289,18 @@ def main():
 
 			pygame.time.wait(1)
 
-			allDead = population.allDotsDead()
-			if allDead:
-				population.calculateFitness()
-				population.naturalSelection()
-				population.mutateBabies()
-			else:
+			if gamemode == 1:
+				allDead = population.allDotsDead()
+				if allDead:
+					population.calculateFitness()
+					population.naturalSelection()
+					# population.save()
+					population.mutateBabies()
+				else:
+					population.update(walls, obstacles[1])
+					population.show(screen)
+
+			if gamemode == 2:
 				population.update(walls, obstacles[1])
 				population.show(screen)
 
@@ -307,7 +309,6 @@ def main():
 
 			if not run:
 				pygame.quit()
-
 
 if __name__ == "__main__":
 	main()

@@ -1,6 +1,8 @@
 from Dot import Dot
 import random
 import pygame
+import pickle
+import os
 
 class Population(object):
     def __init__(self, size, startx, starty, goalx, goaly, brainsize, path):
@@ -12,7 +14,7 @@ class Population(object):
         self.goaly = goaly
         self.gen = 1
         self.bestDot = 0
-        self.minStep = 500
+        self.minStep = 300
         self.fitnessSum = 0
         self.path = path
 
@@ -62,6 +64,16 @@ class Population(object):
         #     self.minStep += 50
 
         pygame.time.wait(500)
+
+    def save(self):
+        data = self.dots[0].brain.directions
+        pickle.dump(data, open("data.dat", "wb"))
+        print(data)
+
+    def upload(self):
+        # loads saved data
+        self.dots[0].brain.directions = pickle.load(open("data.dat", "rb"))
+        print(self.dots[0].brain.directions)
 
     def calculateFitnessSum(self):
         self.fitnessSum = 0
