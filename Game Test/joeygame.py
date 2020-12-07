@@ -3,6 +3,7 @@ import numpy as np
 import operator
 import random
 from Population import Population
+from Pathfinder import find_path
 
 # define dimensions
 HEIGHT = 40

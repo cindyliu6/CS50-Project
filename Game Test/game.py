@@ -120,21 +120,22 @@ def main():
 	clock = pygame.time.Clock()
 	fps = 20
 
-	walls = []
+	walls = pickle.load(open("Game Test/level_data/walls_1.dat", "rb"))
+	#walls = []
 
-	for x in range(WIDTH):
-		walls.append((x, 0))
-		walls.append((x, HEIGHT-1))
+	#for x in range(WIDTH):
+	#	walls.append((x, 0))
+	#	walls.append((x, HEIGHT-1))
 
-	for x in range(HEIGHT):
-		walls.append((0, x))
-		walls.append((WIDTH-1, x))
+	#for x in range(HEIGHT):
+	#	walls.append((0, x))
+	#	walls.append((WIDTH-1, x))
 
-	for x in range(HEIGHT-10):
-		walls.append((18, x))
+	#for x in range(HEIGHT-10):
+	#	walls.append((18, x))
 
-	for x in range(10, HEIGHT):
-		walls.append((42, x))
+	#for x in range(10, HEIGHT):
+	#	walls.append((42, x))
 
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 	pygame.display.set_caption('Worlds Hardest Game')
@@ -145,23 +146,25 @@ def main():
 	vel_left = 1
 	vel_right = -1
 
-	obstacles = [[
-			Obstacle(31, 11, vel_left),
-			Obstacle(32, 12, vel_left),
-			Obstacle(33, 13, vel_left),
-			Obstacle(34, 14, vel_right),
-			Obstacle(35, 15, vel_right),
-			Obstacle(36, 16, vel_right)
-		],
-		[
-			(31, 11),
-			(32,12),
-			(33,13),
-			(34,14),
-			(35,15),
-			(36,16)
-			]
-	]
+	obstacles = pickle.load(open("Game Test/level_data/obs_1.dat", "rb"))
+
+	#obstacles = [[
+	#		Obstacle(31, 11, vel_left),
+	#		Obstacle(32, 12, vel_left),
+	#		Obstacle(33, 13, vel_left),
+	#		Obstacle(34, 14, vel_right),
+	#		Obstacle(35, 15, vel_right),
+	#		Obstacle(36, 16, vel_right)
+	#	],
+	#	[
+	#		(31, 11),
+	#		(32,12),
+	#		(33,13),
+	#		(34,14),
+	#		(35,15),
+	#		(36,16)
+	#		]
+	#]
 
 	# define font
 	font = pygame.font.SysFont('Bauhaus 93', 60)
