@@ -65,14 +65,21 @@ def get_board(w, h, walls):
 
 # moving obstacle class
 class Obstacle():
-	def __init__(self, x, y, vel):
-		self.vel = vel
+	def __init__(self, x, y, xvel, yvel, x_bound, x_bound2, y_bound, y_bound2):
+		self.xvel = xvel
+		self.yvel = yvel
 		self.position = (x, y)
+		self.xlimit = (x_bound)
+		self.xlimit2 = (x_bound2)
+		self.ylimit = (y_bound)
+		self.ylimit2 = (y_bound2)
 
 	def update(self):
-		self.position = tuple(map(operator.add, self.position, (self.vel, 0)))
-		if self.position[0] > 40 or self.position[0] < 20:
-			self.vel = -self.vel
+		self.position = tuple(map(operator.add, self.position, (self.xvel, self.yvel)))
+		if self.position[0] > self.xlimit or self.position[0] < self.xlimit2:
+			self.xvel = -self.xvel
+		if self.position[1] > self.ylimit or self.position[1] < self.ylimit2:
+			self.yvel = -self.yvel
 
 	def draw(self, surface):
 		r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
@@ -170,11 +177,6 @@ def main():
 	font = pygame.font.SysFont('Bauhaus 93', 60)
 	homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
 
-	run = True
-	alive = True
-	win = False
-
-
 	homepage = True
 	gamemode = 0
 
@@ -211,7 +213,6 @@ def main():
 		# print (gamemode)
 
 	if gamemode == 0:
-		player = Player (5,5)
 
 		def collisions(solids, x, y):
 			for solid in solids:
@@ -220,49 +221,77 @@ def main():
 						return True
 			return False
 
-		while run:
-			clock.tick(fps)
+		level = 1
+		run = True
+		alive = True
+		win = False
 
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					run = False
+		while level < 3:
+			player = Player (5,5)
+			obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
+			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
+			board = get_board(WIDTH, HEIGHT, walls)
+			path = find_path(board, START, END)
+			print(level)
 
-			if alive == True and win == False:
-				# print (player.get_position())
+			while run:
+				clock.tick(fps)
 
-				draw_grid(screen, walls, path)
-				goal.draw(screen)
-				player.draw(screen)
+				for event in pygame.event.get():
+					if event.type == pygame.QUIT:
+						level = 100
+						run = False
 
-				for i in range(len(obstacles[0])):
-					obstacles[0][i].update()
-					obstacles[0][i].draw(screen)
-					if player.get_position() == obstacles[0][i].get_position():
-						alive = False
+				if alive == True and win == False:
 
-				if player.get_position() == goal.get_position():
-					win = True
+					# move player using arrow keys
+					move = pygame.key.get_pressed()
+					if move[pygame.K_LEFT] and not collisions(walls, 1, 0):
+						player.move('l')
+					if move[pygame.K_RIGHT] and not collisions(walls, -1, 0):
+						player.move('r')
+					if move[pygame.K_UP] and not collisions(walls, 0, 1):
+						player.move('u')
+					if move[pygame.K_DOWN] and not collisions(walls, 0, -1):
+						player.move('d')
 
-			else:
-				if win:
-					draw_text("You Win!", font, white, 500, 20, screen)
+					for i in range(len(obstacles[0])):
+						if player.get_position() == obstacles[0][i].get_position():
+							alive = False
+
+					draw_grid(screen, walls, path)
+					goal.draw(screen)
+					player.draw(screen)
+
+					for i in range(len(obstacles[0])):
+						obstacles[0][i].update()
+						obstacles[0][i].draw(screen)
+						if player.get_position() == obstacles[0][i].get_position():
+							alive = False
+
+					if player.get_position() == goal.get_position():
+						win = True
+
 				else:
-					draw_text("Game Over", font, white, 500, 20, screen)
+					if win:
+						draw_text("You Win!", font, white, 500, 20, screen)
+						win = False
+						level += 1
+					else:
+						draw_text("Try Again", font, white, 500, 20, screen)
+						alive = True
+						
+					pygame.display.update()
+					pygame.time.wait(1000)
+					break
 
-			# move player using arrow keys
-			move = pygame.key.get_pressed()
-			if move[pygame.K_LEFT] and not collisions(walls, 1, 0):
-				player.move('l')
-			if move[pygame.K_RIGHT] and not collisions(walls, -1, 0):
-				player.move('r')
-			if move[pygame.K_UP] and not collisions(walls, 0, 1):
-				player.move('u')
-			if move[pygame.K_DOWN] and not collisions(walls, 0, -1):
-				player.move('d')
+				pygame.display.update()
+				if not run:
+					level = 100
+					pygame.quit()
 
-			pygame.display.update()
-			if not run:
-				pygame.quit()
+
+
 
 	else:
 		if gamemode == 1:
