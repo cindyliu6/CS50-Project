@@ -222,7 +222,6 @@ def main():
 							return True
 				return False
 			
-			pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 			level = 1
 			alive = True
 			win = False
@@ -235,6 +234,8 @@ def main():
 				path = find_path(board, START, END)
 
 				while run:
+					
+					pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 					clock.tick(fps)
 					for event in pygame.event.get():
 						if event.type == pygame.QUIT:
@@ -342,18 +343,18 @@ def main():
 			board = get_board(WIDTH, HEIGHT, walls)
 			path = find_path(board, START, END)
 			
-			pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 
 			if gamemode == 1:
 				population = Population(100, START[0], START[1], END[0], END[1], 300, path)
 
 			elif gamemode == 2:
-				population = Population(1, START[0], START[1], END[0], END[1], 1000, path)
+				population = Population(1, START[0], START[1], END[0], END[1], 300, path)
 				population.upload(level)
 
 			while run:
 				clock.tick(fps)
-
+				
+				pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 				#delay start of game by 10ms
 				pygame.time.delay(10)
 
