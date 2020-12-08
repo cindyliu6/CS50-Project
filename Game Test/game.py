@@ -174,13 +174,13 @@ def main():
 	#		]
 	#]
 
-	# define font
-	font = pygame.font.SysFont('Bauhaus 93', 30)
+	# define fonts
+	font = pygame.font.SysFont('Bauhaus 93', 70)
 	homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
+	instruction_font = pygame.font.SysFont('Arial', 30)
 
 	homepage = True
 	gamemode = 0
-	# print(path)
 
 	run = True
 	game = True
@@ -221,7 +221,8 @@ def main():
 							# print("collision")
 							return True
 				return False
-
+			
+			pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 			level = 1
 			alive = True
 			win = False
@@ -235,7 +236,6 @@ def main():
 
 				while run:
 					clock.tick(fps)
-
 					for event in pygame.event.get():
 						if event.type == pygame.QUIT:
 							level = 100
@@ -261,7 +261,7 @@ def main():
 						draw_grid(screen, walls, path)
 						goal.draw(screen)
 						player.draw(screen)
-
+						
 						for i in range(len(obstacles[0])):
 							obstacles[0][i].update()
 							obstacles[0][i].draw(screen)
@@ -270,19 +270,22 @@ def main():
 
 						if player.get_position() == goal.get_position():
 							win = True
-
+					
 					else:
 						if win:
-							draw_text("You Win!", font, white, 400, 320, screen)
+							draw_text("You Win!", font, white, 450, 20, screen)
 							win = False
 							level += 1
 						else:
-							draw_text("Try Again", font, white, 400, 320, screen)
+							draw_text("Try Again", font, white, 450, 20, screen)
 							alive = True
 
 						pygame.display.update()
 						pygame.time.wait(1000)
 						break
+					
+					draw_text("Press R to restart level", instruction_font, white, 50, 600, screen)
+					draw_text("Press H to go to home screen", instruction_font, white, 350, 600, screen)
 
 					pygame.display.update()
 
@@ -338,6 +341,8 @@ def main():
 			obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 			board = get_board(WIDTH, HEIGHT, walls)
 			path = find_path(board, START, END)
+			
+			pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 
 			if gamemode == 1:
 				population = Population(100, START[0], START[1], END[0], END[1], 300, path)
@@ -359,6 +364,8 @@ def main():
 				draw_grid(screen, walls, path)
 				goal.draw(screen)
 
+				draw_text("Press H to go to home screen", instruction_font, white, 50, 600, screen)
+
 				for i in range(len(obstacles[0])):
 					obstacles[0][i].update()
 					obstacles[0][i].draw(screen)
@@ -369,7 +376,7 @@ def main():
 				if gamemode == 1:
 
 					gen = population.generation()
-					draw_text("Generation: " + str(gen), font, white, 650, 610, screen)
+					draw_text("Generation: " + str(gen), instruction_font, white, 620, 600, screen)
 
 					# keys = pygame.key.get_pressed()
 					# if keys[pygame.K_h]:
@@ -380,7 +387,7 @@ def main():
 					if allDead:
 						population.calculateFitness()
 						population.naturalSelection()
-						# population.save(2)
+						population.save(level)
 						population.mutateBabies()
 					else:
 						population.update(walls, obstacles[1])
