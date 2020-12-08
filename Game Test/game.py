@@ -179,7 +179,7 @@ def main():
 	homepage = True
 	gamemode = 0
 	# print(path)
-	
+
 	run = True
 
 	while homepage:
@@ -275,7 +275,7 @@ def main():
 					else:
 						draw_text("Try Again", font, white, 500, 20, screen)
 						alive = True
-						
+
 					pygame.display.update()
 					pygame.time.wait(1000)
 					break
