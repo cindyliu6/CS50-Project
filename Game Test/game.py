@@ -12,7 +12,7 @@ HEIGHT = 40
 WIDTH = 60
 SIZE = 15
 screen_width = WIDTH * SIZE
-screen_height = HEIGHT * SIZE + 150
+screen_height = HEIGHT * SIZE + 50
 START = (5, 5)
 END = (50, 35)
 LEVELS = 3
@@ -131,7 +131,7 @@ def main():
 	pygame.init()
 
 	clock = pygame.time.Clock()
-	fps = 20
+	fps = 60
 
 	#walls = []
 
@@ -369,7 +369,7 @@ def main():
 				if gamemode == 1:
 
 					gen = population.generation()
-					draw_text("Generation: " + str(gen), font, white, 700, 650, screen)
+					draw_text("Generation: " + str(gen), font, white, 650, 610, screen)
 
 					# keys = pygame.key.get_pressed()
 					# if keys[pygame.K_h]:
