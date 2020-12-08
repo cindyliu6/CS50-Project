@@ -75,6 +75,12 @@ class Population(object):
         self.dots[0].brain.directions = pickle.load(open("data_" + str(level) + ".dat", "rb"))
         print(self.dots[0].brain.directions)
 
+    # #temporary testing purposes
+    # def upload(self):
+    #     # loads saved data
+    #     self.dots[0].brain.directions = pickle.load(open("300level1.dat", "rb"))
+    #     print(self.dots[0].brain.directions)
+
     def generation(self):  ## seems a bit silly, but not sure how else to call self.gen
         gen = self.gen
         return gen

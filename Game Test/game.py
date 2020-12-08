@@ -301,7 +301,7 @@ def main():
 						pygame.quit()
 
 			## once the player beats level 3, maybe return to homepage?
-			## homepage = True
+			homepage = True
 
 		else:
 			levelSelect = True
@@ -344,7 +344,7 @@ def main():
 
 			elif gamemode == 2:
 				population = Population(1, START[0], START[1], END[0], END[1], 1000, path)
-				population.upload()
+				population.upload(level)
 
 			while run:
 				clock.tick(fps)
