@@ -12,7 +12,7 @@ HEIGHT = 40
 WIDTH = 60
 SIZE = 15
 screen_width = WIDTH * SIZE
-screen_height = HEIGHT * SIZE + 50
+screen_height = HEIGHT * SIZE + 150
 START = (5, 5)
 END = (50, 35)
 
@@ -29,6 +29,7 @@ vel_right = -1
 
 # show text on screen (this probs is not the best way to do this...)
 def draw_text(text, font, text_col, x, y, screen):
+	pygame.font.init()
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
@@ -151,7 +152,7 @@ def main():
 
 
 	goal = Goal(END[0], END[1])
-	
+
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 
 	#obstacles = [[
@@ -173,7 +174,7 @@ def main():
 	#]
 
 	# define font
-	font = pygame.font.SysFont('Bauhaus 93', 60)
+	font = pygame.font.SysFont('Bauhaus 93', 30)
 	homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
 
 	homepage = True
@@ -181,122 +182,18 @@ def main():
 	# print(path)
 
 	run = True
+	game = True
 
-	while homepage:
-		clock.tick(fps)
+	while game:
+		while homepage:
+			clock.tick(10)
 
 
-		image = pygame.image.load('Game Test/homepage.jpg')
-		pygame.draw.ellipse(image, red, (230, 265 + gamemode * 60, 20, 20))
-		draw_text("PLAY GAME", homepage_font, black, 280, 250, image)
-		draw_text("TRAIN COMPUTER", homepage_font, black, 280, 310, image)
-		draw_text("WATCH COMPUTER", homepage_font, black, 280, 370, image)
-
-		screen.blit(image, (0,0))
-
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				run = False
-
-		keys = pygame.key.get_pressed()
-		if keys[pygame.K_UP]:
-			gamemode = (gamemode - 1) % 3
-		elif keys[pygame.K_DOWN]:
-			gamemode = (gamemode + 1) % 3
-		elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
-			homepage = False
-
-		pygame.display.update()
-		# print (gamemode)
-
-	if gamemode == 0:
-
-		def collisions(solids, x, y):
-			for solid in solids:
-				if player.get_position()[0] == solid[0] + x and player.get_position()[1] == solid[1] + y:
-						# print("collision")
-						return True
-			return False
-
-		level = 1
-		alive = True
-		win = False
-
-		while level < 3:
-			player = Player (5,5)
-			obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
-			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
-			board = get_board(WIDTH, HEIGHT, walls)
-			path = find_path(board, START, END)
-
-			while run:
-				clock.tick(fps)
-
-				for event in pygame.event.get():
-					if event.type == pygame.QUIT:
-						level = 100
-						run = False
-
-				if alive == True and win == False:
-
-					# move player using arrow keys
-					move = pygame.key.get_pressed()
-					if move[pygame.K_LEFT] and not collisions(walls, 1, 0):
-						player.move('l')
-					if move[pygame.K_RIGHT] and not collisions(walls, -1, 0):
-						player.move('r')
-					if move[pygame.K_UP] and not collisions(walls, 0, 1):
-						player.move('u')
-					if move[pygame.K_DOWN] and not collisions(walls, 0, -1):
-						player.move('d')
-
-					for i in range(len(obstacles[0])):
-						if player.get_position() == obstacles[0][i].get_position():
-							alive = False
-
-					draw_grid(screen, walls, path)
-					goal.draw(screen)
-					player.draw(screen)
-
-					for i in range(len(obstacles[0])):
-						obstacles[0][i].update()
-						obstacles[0][i].draw(screen)
-						if player.get_position() == obstacles[0][i].get_position():
-							alive = False
-
-					if player.get_position() == goal.get_position():
-						win = True
-
-				else:
-					if win:
-						draw_text("You Win!", font, white, 500, 20, screen)
-						win = False
-						level += 1
-					else:
-						draw_text("Try Again", font, white, 500, 20, screen)
-						alive = True
-
-					pygame.display.update()
-					pygame.time.wait(1000)
-					break
-
-				pygame.display.update()
-				if not run:
-					level = 100
-					pygame.quit()
-
-	else:
-		levelSelect = True
-		level = 0
-
-		while levelSelect:
-			clock.tick(fps)
-
-			image = pygame.image.load('Game Test/level_select.jpg')
-			pygame.draw.ellipse(image, red, (230, 265 + level * 60, 20, 20))
-			draw_text("LEVEL 1", homepage_font, black, 280, 250, image)
-			draw_text("LEVEL 2", homepage_font, black, 280, 310, image)
-			draw_text("LEVEL 3", homepage_font, black, 280, 370, image)
+			image = pygame.image.load('Game Test/homepage.jpg')
+			pygame.draw.ellipse(image, red, (230, 265 + gamemode * 60, 20, 20))
+			draw_text("PLAY GAME", homepage_font, black, 280, 250, image)
+			draw_text("TRAIN COMPUTER", homepage_font, black, 280, 310, image)
+			draw_text("WATCH COMPUTER", homepage_font, black, 280, 370, image)
 
 			screen.blit(image, (0,0))
 
@@ -306,67 +203,204 @@ def main():
 
 			keys = pygame.key.get_pressed()
 			if keys[pygame.K_UP]:
-				level = (level - 1) % 3 
+				gamemode = (gamemode - 1) % 3
 			elif keys[pygame.K_DOWN]:
-				level = (level + 1) % 3 
+				gamemode = (gamemode + 1) % 3
 			elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
-				level += 1
-				levelSelect = False
+				homepage = False
 
 			pygame.display.update()
-		
-		walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
-		obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
-		board = get_board(WIDTH, HEIGHT, walls)
-		path = find_path(board, START, END)
+			# print (gamemode)
 
-		if gamemode == 1:
-			population = Population(100, START[0], START[1], END[0], END[1], 300, path)
+		if gamemode == 0:
 
-		elif gamemode == 2:
-			population = Population(1, START[0], START[1], END[0], END[1], 1000, path)
-			population.upload()
+			def collisions(solids, x, y):
+				for solid in solids:
+					if player.get_position()[0] == solid[0] + x and player.get_position()[1] == solid[1] + y:
+							# print("collision")
+							return True
+				return False
 
-		while run:
-			clock.tick(fps)
+			level = 1
+			alive = True
+			win = False
 
-			#delay start of game by 10ms
-			pygame.time.delay(10)
+			while level < 3:
+				player = Player (5,5)
+				obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
+				walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
+				board = get_board(WIDTH, HEIGHT, walls)
+				path = find_path(board, START, END)
 
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					run = False
+				while run:
+					clock.tick(fps)
 
-			draw_grid(screen, walls, path)
-			goal.draw(screen)
+					for event in pygame.event.get():
+						if event.type == pygame.QUIT:
+							level = 100
+							run = False
 
-			for i in range(len(obstacles[0])):
-				obstacles[0][i].update()
-				obstacles[0][i].draw(screen)
-				obstacles[1][i] = obstacles[0][i].get_position()
+					if alive == True and win == False:
 
-			pygame.time.wait(1)
+						# move player using arrow keys
+						move = pygame.key.get_pressed()
+						if move[pygame.K_LEFT] and not collisions(walls, 1, 0):
+							player.move('l')
+						if move[pygame.K_RIGHT] and not collisions(walls, -1, 0):
+							player.move('r')
+						if move[pygame.K_UP] and not collisions(walls, 0, 1):
+							player.move('u')
+						if move[pygame.K_DOWN] and not collisions(walls, 0, -1):
+							player.move('d')
+
+						for i in range(len(obstacles[0])):
+							if player.get_position() == obstacles[0][i].get_position():
+								alive = False
+
+						draw_grid(screen, walls, path)
+						goal.draw(screen)
+						player.draw(screen)
+
+						for i in range(len(obstacles[0])):
+							obstacles[0][i].update()
+							obstacles[0][i].draw(screen)
+							if player.get_position() == obstacles[0][i].get_position():
+								alive = False
+
+						if player.get_position() == goal.get_position():
+							win = True
+
+					else:
+						if win:
+							draw_text("You Win!", font, white, 400, 320, screen)
+							win = False
+							level += 1
+						else:
+							draw_text("Try Again", font, white, 400, 320, screen)
+							alive = True
+
+						pygame.display.update()
+						pygame.time.wait(1000)
+						break
+
+					pygame.display.update()
+
+					keys = pygame.key.get_pressed()
+					# restarts current level
+					if keys[pygame.K_r]:
+						break
+					# back to homepage
+					elif keys[pygame.K_h]:
+						homepage = True
+						run = False
+
+				if not run:
+					level = 100
+					if not homepage:
+						pygame.quit()
+
+			## once the player beats level 3, maybe return to homepage?
+			## homepage = True
+
+		else:
+			levelSelect = True
+			level = 0
+			run = True
+
+			while levelSelect:
+				clock.tick(10)
+
+				image = pygame.image.load('Game Test/level_select.jpg')
+				pygame.draw.ellipse(image, red, (230, 265 + level * 60, 20, 20))
+				draw_text("LEVEL 1", homepage_font, black, 280, 250, image)
+				draw_text("LEVEL 2", homepage_font, black, 280, 310, image)
+				draw_text("LEVEL 3", homepage_font, black, 280, 370, image)
+
+				screen.blit(image, (0,0))
+
+				for event in pygame.event.get():
+					if event.type == pygame.QUIT:
+						run = False
+
+				keys = pygame.key.get_pressed()
+				if keys[pygame.K_UP]:
+					level = (level - 1) % 3
+				elif keys[pygame.K_DOWN]:
+					level = (level + 1) % 3
+				elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
+					level += 1
+					levelSelect = False
+
+				pygame.display.update()
+
+			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
+			obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
+			board = get_board(WIDTH, HEIGHT, walls)
+			path = find_path(board, START, END)
 
 			if gamemode == 1:
-				allDead = population.allDotsDead()
-				if allDead:
-					population.calculateFitness()
-					population.naturalSelection()
-					# population.save(2)
-					population.mutateBabies()
-				else:
+				population = Population(100, START[0], START[1], END[0], END[1], 300, path)
+
+			elif gamemode == 2:
+				population = Population(1, START[0], START[1], END[0], END[1], 1000, path)
+				population.upload()
+
+			while run:
+				clock.tick(fps)
+
+				#delay start of game by 10ms
+				pygame.time.delay(10)
+
+				for event in pygame.event.get():
+					if event.type == pygame.QUIT:
+						run = False
+
+				draw_grid(screen, walls, path)
+				goal.draw(screen)
+
+				for i in range(len(obstacles[0])):
+					obstacles[0][i].update()
+					obstacles[0][i].draw(screen)
+					obstacles[1][i] = obstacles[0][i].get_position()
+
+				pygame.time.wait(1)
+
+				if gamemode == 1:
+
+					gen = population.generation()
+					draw_text("Generation: " + str(gen), font, white, 700, 650, screen)
+
+					# keys = pygame.key.get_pressed()
+					# if keys[pygame.K_h]:
+					# 	homepage = True
+					# 	break
+
+					allDead = population.allDotsDead()
+					if allDead:
+						population.calculateFitness()
+						population.naturalSelection()
+						# population.save(2)
+						population.mutateBabies()
+					else:
+						population.update(walls, obstacles[1])
+						population.show(screen)
+
+				if gamemode == 2:
 					population.update(walls, obstacles[1])
 					population.show(screen)
 
-			if gamemode == 2:
-				population.update(walls, obstacles[1])
-				population.show(screen)
+				#print("update")
+				pygame.display.update()
 
-			#print("update")
-			pygame.display.update()
+				keys = pygame.key.get_pressed()
+				if keys[pygame.K_h]:
+					homepage = True
+					break
 
-			if not run:
-				pygame.quit()
+				if not run:
+					pygame.quit()
+		if not game:
+			pygame.quit()
 
 if __name__ == "__main__":
 	main()
