@@ -62,6 +62,11 @@ class Dot(object):
 
         # Keep moving when alive and not at goal
         if not self.dead and not self.reachedGoal:
+
+            # Kill dot if it reaches an obstacle
+            if self.pos in obstacle_pos:
+                self.dead = True
+
             self.move(walls)
 
             # Kill dot if it reaches an obstacle
@@ -78,7 +83,7 @@ class Dot(object):
         # Add 1 to always be higher than a dot that does not arrive at goal
         if self.reachedGoal:
             self.fitness = 1 + 10000 /( self.brain.step * self.brain.step)
-        
+
         # When dot is not at the goal
         else:
             # Find minimum distance of dot to best path from BFS

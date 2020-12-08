@@ -29,6 +29,13 @@ for x in range(HEIGHT-10):
 for x in range(10, HEIGHT):
 	walls.append((42, x))
 
+for x in range(13):
+	walls.append((x, 9))
+	walls.append((x, 27))
+
+for x in range(6, 18):
+	walls.append((x, 18))
+
 ## SAVING WALLS 1 AND 2 AND 4
 
 # pickle.dump(walls, open("walls_1.dat", "wb"))
@@ -177,29 +184,29 @@ obstacles_4 = [[
 		Obstacle(38, 11, vel_left, 0, 40, 20, 10000, -100000),
 		Obstacle(37, 12, vel_left, 0, 40, 20, 10000, -100000),
 		Obstacle(36, 13, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(35, 15, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(34, 16, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(33, 17, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(32, 19, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(31, 20, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(30, 21, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(29, 23, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(28, 24, vel_left, 0, 40, 20, 10000, -100000),
-		Obstacle(27, 25, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(35, 14, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(34, 15, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(33, 16, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(32, 17, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(31, 18, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(30, 19, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(29, 20, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(28, 21, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(27, 22, vel_left, 0, 40, 20, 10000, -100000),
 	],
 	[
 		(38, 11),
 		(37, 12),
 		(36, 13),
-		(35, 15),
-		(34, 16),
-		(33, 17),
-		(32, 19),
-		(31, 20),
-		(30, 21),
-		(29, 23),
-		(28, 24),
-		(27, 25)
+		(35, 14),
+		(34, 15),
+		(33, 16),
+		(32, 17),
+		(31, 18),
+		(30, 19),
+		(29, 20),
+		(28, 21),
+		(27, 22)
 		]
 ]
 

@@ -3,7 +3,7 @@
 # https://www.codementor.io/blog/basic-pathfinding-explained-with-python-5pil8767c1
 
 # BFS algorithm used in fitness function
-# Finds path 
+# Finds path
 def find_path(board, start, end):
     # Start path with last tile in path
     path = [end]
@@ -16,7 +16,7 @@ def find_path(board, start, end):
     start_x = start[1]
     start_y = start[0]
     board[start_x][start_y] = 1
-    
+
     # While the queue is not empty
     while queue:
         # Remove first element from queue
@@ -90,10 +90,3 @@ def find_path(board, start, end):
     # Reverse path so that it is now start to finish
     path.reverse()
     return path
-
-        
-
-
-
-
-

@@ -15,7 +15,7 @@ screen_width = WIDTH * SIZE
 screen_height = HEIGHT * SIZE + 50
 START = (5, 5)
 END = (50, 35)
-LEVELS = 3
+LEVELS = 4
 
 # define common colors
 black = (0, 0, 0)
@@ -221,7 +221,7 @@ def main():
 							# print("collision")
 							return True
 				return False
-			
+
 			level = 1
 			alive = True
 			win = False
@@ -234,7 +234,7 @@ def main():
 				path = find_path(board, START, END)
 
 				while run:
-					
+
 					pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 					clock.tick(fps)
 					for event in pygame.event.get():
@@ -262,7 +262,7 @@ def main():
 						draw_grid(screen, walls, path)
 						goal.draw(screen)
 						player.draw(screen)
-						
+
 						for i in range(len(obstacles[0])):
 							obstacles[0][i].update()
 							obstacles[0][i].draw(screen)
@@ -271,7 +271,7 @@ def main():
 
 						if player.get_position() == goal.get_position():
 							win = True
-					
+
 					else:
 						if win:
 							draw_text("You Win!", font, white, 450, 20, screen)
@@ -284,9 +284,9 @@ def main():
 						pygame.display.update()
 						pygame.time.wait(1000)
 						break
-					
+
 					draw_text("Press R to restart level", instruction_font, white, 50, 600, screen)
-					draw_text("Press H to go to home screen", instruction_font, white, 350, 600, screen)
+					draw_text("Press H to go to home screen", instruction_font, white, 400, 600, screen)
 
 					pygame.display.update()
 
@@ -335,17 +335,20 @@ def main():
 				elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
 					level += 1
 					levelSelect = False
-
+				elif keys[pygame.K_q]:
+					level = 4
+					levelSelect = False
 				pygame.display.update()
 
 			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
 			obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 			board = get_board(WIDTH, HEIGHT, walls)
 			path = find_path(board, START, END)
-			
+
 
 			if gamemode == 1:
-				population = Population(100, START[0], START[1], END[0], END[1], 300, path)
+				population = Population(500, START[0], START[1], END[0], END[1], 300, path)
+				population.upload(4)
 
 			elif gamemode == 2:
 				population = Population(1, START[0], START[1], END[0], END[1], 300, path)
@@ -353,7 +356,7 @@ def main():
 
 			while run:
 				clock.tick(fps)
-				
+
 				pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 				#delay start of game by 10ms
 				pygame.time.delay(10)
@@ -390,6 +393,7 @@ def main():
 						population.naturalSelection()
 						population.save(level)
 						population.mutateBabies()
+						obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 					else:
 						population.update(walls, obstacles[1])
 						population.show(screen)

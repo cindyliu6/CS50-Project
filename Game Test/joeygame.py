@@ -147,6 +147,13 @@ def main():
 	for x in range(10, HEIGHT):
 		walls.append((42, x))
 
+	for x in range(13):
+		walls.append((x, 9))
+		walls.append((x, 27))
+
+	for x in range(6, 18):
+		walls.append((x, 18))
+
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 	pygame.display.set_caption('Worlds Hardest Game')
 

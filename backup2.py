@@ -12,7 +12,7 @@ HEIGHT = 40
 WIDTH = 60
 SIZE = 15
 screen_width = WIDTH * SIZE
-screen_height = HEIGHT * SIZE + 150
+screen_height = HEIGHT * SIZE + 50
 START = (5, 5)
 END = (50, 35)
 LEVELS = 3
@@ -131,7 +131,7 @@ def main():
 	pygame.init()
 
 	clock = pygame.time.Clock()
-	fps = 20
+	fps = 60
 
 	#walls = []
 
@@ -174,13 +174,13 @@ def main():
 	#		]
 	#]
 
-	# define font
-	font = pygame.font.SysFont('Bauhaus 93', 30)
+	# define fonts
+	font = pygame.font.SysFont('Bauhaus 93', 70)
 	homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
+	instruction_font = pygame.font.SysFont('Arial', 30)
 
 	homepage = True
 	gamemode = 0
-	# print(path)
 
 	run = True
 	game = True
@@ -226,7 +226,7 @@ def main():
 			alive = True
 			win = False
 
-			while level < 3:
+			while level <= LEVELS:
 				player = Player (5,5)
 				obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 				walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
@@ -234,8 +234,9 @@ def main():
 				path = find_path(board, START, END)
 
 				while run:
-					clock.tick(fps)
 
+					pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
+					clock.tick(fps)
 					for event in pygame.event.get():
 						if event.type == pygame.QUIT:
 							level = 100
@@ -273,16 +274,19 @@ def main():
 
 					else:
 						if win:
-							draw_text("You Win!", font, white, 400, 320, screen)
+							draw_text("You Win!", font, white, 450, 20, screen)
 							win = False
 							level += 1
 						else:
-							draw_text("Try Again", font, white, 400, 320, screen)
+							draw_text("Try Again", font, white, 450, 20, screen)
 							alive = True
 
 						pygame.display.update()
 						pygame.time.wait(1000)
 						break
+
+					draw_text("Press R to restart level", instruction_font, white, 50, 600, screen)
+					draw_text("Press H to go to home screen", instruction_font, white, 400, 600, screen)
 
 					pygame.display.update()
 
@@ -301,7 +305,7 @@ def main():
 						pygame.quit()
 
 			## once the player beats level 3, maybe return to homepage?
-			## homepage = True
+			homepage = True
 
 		else:
 			levelSelect = True
@@ -331,7 +335,9 @@ def main():
 				elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
 					level += 1
 					levelSelect = False
-
+				elif keys[pygame.K_q]:
+					level = 4
+					levelSelect = False
 				pygame.display.update()
 
 			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
@@ -339,16 +345,19 @@ def main():
 			board = get_board(WIDTH, HEIGHT, walls)
 			path = find_path(board, START, END)
 
+
 			if gamemode == 1:
-				population = Population(100, START[0], START[1], END[0], END[1], 300, path)
+				population = Population(500, START[0], START[1], END[0], END[1], 300, path)
+				population.upload(4)
 
 			elif gamemode == 2:
-				population = Population(1, START[0], START[1], END[0], END[1], 1000, path)
-				population.upload()
+				population = Population(1, START[0], START[1], END[0], END[1], 300, path)
+				population.upload(level)
 
 			while run:
 				clock.tick(fps)
 
+				pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 				#delay start of game by 10ms
 				pygame.time.delay(10)
 
@@ -358,6 +367,8 @@ def main():
 
 				draw_grid(screen, walls, path)
 				goal.draw(screen)
+
+				draw_text("Press H to go to home screen", instruction_font, white, 50, 600, screen)
 
 				for i in range(len(obstacles[0])):
 					obstacles[0][i].update()
@@ -369,7 +380,7 @@ def main():
 				if gamemode == 1:
 
 					gen = population.generation()
-					draw_text("Generation: " + str(gen), font, white, 700, 650, screen)
+					draw_text("Generation: " + str(gen), instruction_font, white, 620, 600, screen)
 
 					# keys = pygame.key.get_pressed()
 					# if keys[pygame.K_h]:
@@ -380,8 +391,9 @@ def main():
 					if allDead:
 						population.calculateFitness()
 						population.naturalSelection()
-						# population.save(2)
+						population.save(level)
 						population.mutateBabies()
+						obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 					else:
 						population.update(walls, obstacles[1])
 						population.show(screen)
