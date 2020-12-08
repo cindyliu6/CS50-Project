@@ -2,6 +2,9 @@ import pickle
 import os
 from game import Obstacle
 
+# THIS FILE STORES ALL DATA FOR FILES 
+
+# DATA FOR EVERY LEVEL
 WIDTH = 60
 HEIGHT = 40
 walls = []
@@ -11,6 +14,7 @@ vel_right = -1
 vel_up = -1
 vel_down = 1
 
+## DATA FOR WALLS OF LEVEL ONE AND TWO
 #for x in range(WIDTH):
 #	walls.append((x, 0))
 #	walls.append((x, HEIGHT-1))
@@ -25,6 +29,13 @@ vel_down = 1
 #for x in range(10, HEIGHT):
 #	walls.append((42, x))
 
+## SAVING WALLS 1 AND 2
+
+# pickle.dump(walls, open("walls_1.dat", "wb"))
+
+# pickle.dump(walls, open("walls_2.dat", "wb"))
+
+## WALL DATA FOR LEVEL 3
 for x in range(WIDTH):
 	walls.append((x, 0))
 	walls.append((x, HEIGHT-1))
@@ -39,12 +50,11 @@ for x in range(WIDTH - 10):
 for x in range(10, WIDTH):
 	walls.append((x, 30))
 
-# pickle.dump(walls, open("walls_1.dat", "wb"))
-
-# pickle.dump(walls, open("walls_2.dat", "wb"))
+# SAVE WALL DATA FOR LEVEL 3
 pickle.dump(walls, open("walls_3.dat", "wb"))
 print(walls)
 
+# OBSTACLE DATA FOR LEVEL 1
 obstacles = [[
 		Obstacle(31, 11, vel_left, 0, 40, 20, 10000, -100000),
 		Obstacle(32, 12, vel_left, 0, 40, 20, 10000, -100000),
@@ -63,6 +73,7 @@ obstacles = [[
 		]
 ]
 
+# OBSTACLE DATA FOR LEVEL 2
 obstacles_2 = [[
 		Obstacle(20, 9, 0, vel_down, 40, 20, 38, 2),
 		Obstacle(21, 9, 0, vel_down, 40, 20, 38, 2),
@@ -113,6 +124,8 @@ obstacles_2 = [[
 
 		]
 ]
+
+# OBSTACLE DATA FOR LEVEL 3
 obstacles_3 = [[
 
 		Obstacle(47, 11, 0, vel_down, 40, 20, 28, 12),
@@ -158,6 +171,8 @@ obstacles_3 = [[
 		(54, 10)
 		]
 ]
+
+## SAVING DATA FOR OBSTACLES 
 
 #pickle.dump(obstacles, open("obs_1.dat", "wb"))
 #pickle.dump(obstacles_2, open("obs_2.dat", "wb"))
