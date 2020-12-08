@@ -15,6 +15,7 @@ screen_width = WIDTH * SIZE
 screen_height = HEIGHT * SIZE + 50
 START = (5, 5)
 END = (50, 35)
+LEVELS = 3
 
 # define common colors
 black = (0, 0, 0)
@@ -222,7 +223,7 @@ def main():
 		alive = True
 		win = False
 
-		while level < 3:
+		while level <= LEVELS:
 			player = Player (5,5)
 			obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
