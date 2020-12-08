@@ -15,7 +15,7 @@ screen_width = WIDTH * SIZE
 screen_height = HEIGHT * SIZE + 50
 START = (5, 5)
 END = (50, 35)
-LEVELS = 4
+LEVELS = 3
 
 # define common colors
 black = (0, 0, 0)
@@ -335,9 +335,7 @@ def main():
 				elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
 					level += 1
 					levelSelect = False
-				elif keys[pygame.K_q]:
-					level = 4
-					levelSelect = False
+					
 				pygame.display.update()
 
 			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
