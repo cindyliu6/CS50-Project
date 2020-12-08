@@ -11,6 +11,20 @@ vel_right = -1
 vel_up = -1
 vel_down = 1
 
+#for x in range(WIDTH):
+#	walls.append((x, 0))
+#	walls.append((x, HEIGHT-1))
+
+#for x in range(HEIGHT):
+#	walls.append((0, x))
+#	walls.append((WIDTH-1, x))
+
+#for x in range(HEIGHT-10):
+#	walls.append((18, x))
+
+#for x in range(10, HEIGHT):
+#	walls.append((42, x))
+
 for x in range(WIDTH):
 	walls.append((x, 0))
 	walls.append((x, HEIGHT-1))
@@ -19,15 +33,16 @@ for x in range(HEIGHT):
 	walls.append((0, x))
 	walls.append((WIDTH-1, x))
 
-for x in range(HEIGHT-10):
-	walls.append((18, x))
+for x in range(WIDTH - 10):
+	walls.append((x, 10))
 
-for x in range(10, HEIGHT):
-	walls.append((42, x))
+for x in range(10, WIDTH):
+	walls.append((x, 30))
 
 # pickle.dump(walls, open("walls_1.dat", "wb"))
 
 # pickle.dump(walls, open("walls_2.dat", "wb"))
+pickle.dump(walls, open("walls_3.dat", "wb"))
 print(walls)
 
 obstacles = [[
@@ -49,28 +64,28 @@ obstacles = [[
 ]
 
 obstacles_2 = [[
-		Obstacle(20, 9, 0, vel_down, 40, 20, 30, 9),
-		Obstacle(21, 9, 0, vel_down, 40, 20, 30, 9),
-		Obstacle(22, 9, 0, vel_down, 40, 20, 30, 9),
-		Obstacle(23, 9, 0, vel_down, 40, 20, 30, 9),
-		Obstacle(24, 9, 0, vel_down, 40, 20, 30, 9),
-		Obstacle(25, 9, 0, vel_down, 40, 20, 30, 9),
-        Obstacle(26, 9, 0, vel_down, 40, 20, 30, 9),
-        Obstacle(27, 9, 0, vel_down, 40, 20, 30, 9),
-        Obstacle(28, 9, 0, vel_down, 40, 20, 30, 9),
-        Obstacle(29, 9, 0, vel_down, 40, 20, 30, 9),
-        Obstacle(30, 9, 0, vel_down, 40, 20, 30, 9),
-        Obstacle(31, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(32, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(33, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(34, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(35, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(36, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(37, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(38, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(39, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(40, 30, 0, vel_up, 40, 20, 30, 9),
-        Obstacle(41, 30, 0, vel_up, 40, 20, 30, 9)
+		Obstacle(20, 9, 0, vel_down, 40, 20, 38, 2),
+		Obstacle(21, 9, 0, vel_down, 40, 20, 38, 2),
+		Obstacle(22, 9, 0, vel_down, 40, 20, 38, 2),
+		Obstacle(23, 9, 0, vel_down, 40, 20, 38, 2),
+		Obstacle(24, 9, 0, vel_down, 40, 20, 38, 2),
+		Obstacle(25, 9, 0, vel_down, 40, 20, 38, 2),
+        Obstacle(26, 9, 0, vel_down, 40, 20, 38, 2),
+        Obstacle(27, 9, 0, vel_down, 40, 20, 38, 2),
+        Obstacle(28, 9, 0, vel_down, 40, 20, 38, 2),
+        Obstacle(29, 9, 0, vel_down, 40, 20, 38, 2),
+        Obstacle(30, 9, 0, vel_down, 40, 20, 38, 2),
+        Obstacle(31, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(32, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(33, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(34, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(35, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(36, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(37, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(38, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(39, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(40, 30, 0, vel_up, 40, 20, 38, 2),
+        Obstacle(41, 30, 0, vel_up, 40, 20, 38, 2)
 	],
 	[
 		(20, 9),
@@ -98,7 +113,52 @@ obstacles_2 = [[
 
 		]
 ]
+obstacles_3 = [[
+
+		Obstacle(47, 11, 0, vel_down, 40, 20, 28, 12),
+		Obstacle(46, 11, 0, vel_down, 40, 20, 28, 12),
+		Obstacle(45, 11, 0, vel_down, 40, 20, 28, 12),
+		Obstacle(44, 11, 0, vel_down, 40, 20, 28, 12),
+		Obstacle(43, 11, 0, vel_down, 40, 20, 28, 12),
+		Obstacle(42, 11, 0, vel_down, 40, 20, 28, 12),
+		Obstacle(41, 11, 0, vel_down, 40, 20, 28, 12),
+		Obstacle(40, 11, 0, vel_down, 40, 20, 28, 12),
+		Obstacle(35, 28, 0, vel_up, 40, 20, 28, 12),
+		Obstacle(34, 28, 0, vel_up, 40, 20, 28, 12),
+		Obstacle(33, 28, 0, vel_up, 40, 20, 28, 12),
+		Obstacle(32, 28, 0, vel_up, 40, 20, 28, 12),
+		Obstacle(31, 28, 0, vel_up, 40, 20, 28, 12),
+		Obstacle(30, 28, 0, vel_up, 40, 20, 28, 12),
+		Obstacle(10, 12, vel_right, vel_down, 26, 10, 28, 12),
+		Obstacle(2, 30, vel_right, 0, 8, 2, 40, 0),
+		Obstacle(3, 30, vel_right, 0, 8, 2, 40, 0),
+		Obstacle(53, 10, vel_right, 0, 57, 51, 40, 0),
+		Obstacle(54, 10, vel_right, 0, 57, 51, 40, 0)
+
+	],
+	[
+		(47, 11),
+		(46, 11),
+		(45, 11),
+		(44, 11),
+		(43, 11),
+		(42, 11),
+		(41, 11),
+		(40, 11),
+		(35, 28),
+		(34, 28),
+		(33, 28),
+		(32, 28),
+		(31, 28),
+		(30, 28),
+		(10, 12),
+		(2, 30),
+		(3, 30),
+		(53, 10),
+		(54, 10)
+		]
+]
 
 #pickle.dump(obstacles, open("obs_1.dat", "wb"))
-
-pickle.dump(obstacles_2, open("obs_2.dat", "wb"))
+#pickle.dump(obstacles_2, open("obs_2.dat", "wb"))
+pickle.dump(obstacles_3, open("obs_3.dat", "wb"))
