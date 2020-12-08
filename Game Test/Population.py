@@ -3,10 +3,19 @@ import random
 import pygame
 import pickle
 import os
+import math
+
+DIR = [
+    (0,0),
+    (1, 0),
+    (-1, 0),
+    (0, 1),
+    (0, -1)
+    ]
 
 # Population class for group of dots
 class Population(object):
-    def __init__(self, size, startx, starty, goalx, goaly, brainsize, path):
+    def __init__(self, size, startx, starty, goalx, goaly, brainsize, path, train):
         self.dots = []
         # Create array of dots
         for i in range(size):
@@ -17,7 +26,11 @@ class Population(object):
         self.goaly = goaly
         self.gen = 1
         self.bestDot = 0
-        self.maxStep = brainsize
+        if train:
+            self.maxStep = 20
+        else:
+            self.maxStep = brainsize
+        self.brainsize = brainsize
         self.fitnessSum = 0
         self.path = path
 
@@ -77,6 +90,14 @@ class Population(object):
         # Increase generation
         self.gen += 1
 
+        if self.gen % 30 == 0 and self.maxStep < self.brainsize:
+            for dot in self.dots:
+                for i in range(self.maxStep, self.brainsize):
+                    r = math.floor(random.random() * 5) 
+                    dot.brain.directions[i] = DIR[r]
+
+            self.maxStep += 20
+
         pygame.time.wait(50)
 
     # Save directions from best dot
@@ -89,13 +110,7 @@ class Population(object):
     def upload(self, level):
         # loads saved data
         self.dots[0].brain.directions = pickle.load(open("data_" + str(level) + ".dat", "rb"))
-        print(self.dots[0].brain.directions)
-
-    # #temporary testing purposes
-    # def upload(self):
-    #     # loads saved data
-    #     self.dots[0].brain.directions = pickle.load(open("300level1.dat", "rb"))
-    #     print(self.dots[0].brain.directions)
+       #  print(self.dots[0].brain.directions)
 
     # Accessor for generation value
     def generation(self):

@@ -133,46 +133,11 @@ def main():
 	clock = pygame.time.Clock()
 	fps = 60
 
-	#walls = []
-
-	#for x in range(WIDTH):
-	#	walls.append((x, 0))
-	#	walls.append((x, HEIGHT-1))
-
-	#for x in range(HEIGHT):
-	#	walls.append((0, x))
-	#	walls.append((WIDTH-1, x))
-
-	#for x in range(HEIGHT-10):
-	#	walls.append((18, x))
-
-	#for x in range(10, HEIGHT):
-	#	walls.append((42, x))
-
 	pygame.display.set_caption('Worlds Hardest Game')
-
 
 	goal = Goal(END[0], END[1])
 
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
-
-	#obstacles = [[
-	#		Obstacle(31, 11, vel_left),
-	#		Obstacle(32, 12, vel_left),
-	#		Obstacle(33, 13, vel_left),
-	#		Obstacle(34, 14, vel_right),
-	#		Obstacle(35, 15, vel_right),
-	#		Obstacle(36, 16, vel_right)
-	#	],
-	#	[
-	#		(31, 11),
-	#		(32,12),
-	#		(33,13),
-	#		(34,14),
-	#		(35,15),
-	#		(36,16)
-	#		]
-	#]
 
 	# define fonts
 	font = pygame.font.SysFont('Bauhaus 93', 70)
@@ -211,14 +176,13 @@ def main():
 				homepage = False
 
 			pygame.display.update()
-			# print (gamemode)
+
 
 		if gamemode == 0:
 
 			def collisions(solids, x, y):
 				for solid in solids:
 					if player.get_position()[0] == solid[0] + x and player.get_position()[1] == solid[1] + y:
-							# print("collision")
 							return True
 				return False
 
@@ -227,7 +191,7 @@ def main():
 			win = False
 
 			while level <= LEVELS:
-				player = Player (5,5)
+				player = Player (START[0], START[1])
 				obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 				walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
 				board = get_board(WIDTH, HEIGHT, walls)
@@ -235,7 +199,6 @@ def main():
 
 				while run:
 
-					pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 					clock.tick(fps)
 					for event in pygame.event.get():
 						if event.type == pygame.QUIT:
@@ -243,6 +206,8 @@ def main():
 							run = False
 
 					if alive == True and win == False:
+						
+						pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 
 						# move player using arrow keys
 						move = pygame.key.get_pressed()
@@ -345,11 +310,13 @@ def main():
 
 
 			if gamemode == 1:
-				population = Population(500, START[0], START[1], END[0], END[1], 300, path)
-				population.upload(4)
+				population = Population(500, START[0], START[1], END[0], END[1], 500, path, True)
+
+				# If training needed to be spread out over time this can be uncommented
+				# population.upload(level)
 
 			elif gamemode == 2:
-				population = Population(1, START[0], START[1], END[0], END[1], 300, path)
+				population = Population(1, START[0], START[1], END[0], END[1], 500, path, False)
 				population.upload(level)
 
 			while run:
@@ -389,7 +356,7 @@ def main():
 					if allDead:
 						population.calculateFitness()
 						population.naturalSelection()
-						population.save(level)
+						# population.save(level)
 						population.mutateBabies()
 						obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 					else:
@@ -400,7 +367,6 @@ def main():
 					population.update(walls, obstacles[1])
 					population.show(screen)
 
-				#print("update")
 				pygame.display.update()
 
 				keys = pygame.key.get_pressed()
