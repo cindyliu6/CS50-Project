@@ -135,6 +135,12 @@ def main():
 		walls.append((0, x))
 		walls.append((WIDTH-1, x))
 
+	#for x in range(WIDTH - 10):
+	#	walls.append((x, 10))
+
+	#for x in range(10, WIDTH):
+	#	walls.append((x, 30))
+
 	for x in range(HEIGHT-10):
 		walls.append((18, x))
 
@@ -153,23 +159,35 @@ def main():
 	vel_down = 1
 
 	obstacles = [[
-			Obstacle(31, 11, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(32, 12, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(33, 13, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(34, 14, vel_right, 0, 40, 20, 10000, -100000),
-			Obstacle(35, 15, vel_right, 0, 40, 20, 10000, -100000),
-			Obstacle(36, 16, vel_right, 0, 40, 20, 10000, -100000),
+
+			Obstacle(38, 11, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(37, 12, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(36, 13, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(35, 15, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(34, 16, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(33, 17, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(32, 19, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(31, 20, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(30, 21, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(29, 23, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(28, 24, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(27, 25, vel_left, 0, 40, 20, 10000, -100000),
 		],
 		[
-			(31, 11),
-			(32, 12),
-			(33, 13),
-			(34, 14),
+			(38, 11),
+			(37, 12),
+			(36, 13),
 			(35, 15),
-			(36, 16)
+			(34, 16),
+			(33, 17),
+			(32, 19),
+			(31, 20),
+			(30, 21),
+			(29, 23),
+			(28, 24),
+			(27, 25)
 			]
 	]
-
 	# define font
 	font = pygame.font.SysFont('Bauhaus 93', 60)
 	homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
@@ -191,7 +209,7 @@ def main():
 		clock.tick(fps)
 
 
-		image = pygame.image.load('Game Test/homepage2.jpg')
+		image = pygame.image.load('Game Test/homepage.jpg')
 		pygame.draw.ellipse(image, red, (230, 265 + gamemode * 60, 20, 20))
 		draw_text("PLAY GAME", homepage_font, black, 280, 250, image)
 		draw_text("TRAIN COMPUTER", homepage_font, black, 280, 310, image)

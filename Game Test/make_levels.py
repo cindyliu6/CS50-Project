@@ -2,7 +2,7 @@ import pickle
 import os
 from game import Obstacle
 
-# THIS FILE STORES ALL DATA FOR FILES 
+# THIS FILE STORES ALL DATA FOR FILES
 
 # DATA FOR EVERY LEVEL
 WIDTH = 60
@@ -14,28 +14,7 @@ vel_right = -1
 vel_up = -1
 vel_down = 1
 
-## DATA FOR WALLS OF LEVEL ONE AND TWO
-#for x in range(WIDTH):
-#	walls.append((x, 0))
-#	walls.append((x, HEIGHT-1))
-
-#for x in range(HEIGHT):
-#	walls.append((0, x))
-#	walls.append((WIDTH-1, x))
-
-#for x in range(HEIGHT-10):
-#	walls.append((18, x))
-
-#for x in range(10, HEIGHT):
-#	walls.append((42, x))
-
-## SAVING WALLS 1 AND 2
-
-# pickle.dump(walls, open("walls_1.dat", "wb"))
-
-# pickle.dump(walls, open("walls_2.dat", "wb"))
-
-## WALL DATA FOR LEVEL 3
+## DATA FOR WALLS OF LEVEL ONE AND TWO AND FOUR
 for x in range(WIDTH):
 	walls.append((x, 0))
 	walls.append((x, HEIGHT-1))
@@ -44,14 +23,36 @@ for x in range(HEIGHT):
 	walls.append((0, x))
 	walls.append((WIDTH-1, x))
 
-for x in range(WIDTH - 10):
-	walls.append((x, 10))
+for x in range(HEIGHT-10):
+	walls.append((18, x))
 
-for x in range(10, WIDTH):
-	walls.append((x, 30))
+for x in range(10, HEIGHT):
+	walls.append((42, x))
+
+## SAVING WALLS 1 AND 2 AND 4
+
+# pickle.dump(walls, open("walls_1.dat", "wb"))
+
+# pickle.dump(walls, open("walls_2.dat", "wb"))
+pickle.dump(walls, open("walls_4.dat", "wb"))
+
+## WALL DATA FOR LEVEL 3
+#for x in range(WIDTH):
+#	walls.append((x, 0))
+#	walls.append((x, HEIGHT-1))
+
+#for x in range(HEIGHT):
+#	walls.append((0, x))
+#	walls.append((WIDTH-1, x))
+
+#for x in range(WIDTH - 10):
+#	walls.append((x, 10))
+
+#for x in range(10, WIDTH):
+#	walls.append((x, 30))
 
 # SAVE WALL DATA FOR LEVEL 3
-pickle.dump(walls, open("walls_3.dat", "wb"))
+#pickle.dump(walls, open("walls_3.dat", "wb"))
 print(walls)
 
 # OBSTACLE DATA FOR LEVEL 1
@@ -171,9 +172,40 @@ obstacles_3 = [[
 		(54, 10)
 		]
 ]
+obstacles_4 = [[
 
-## SAVING DATA FOR OBSTACLES 
+		Obstacle(38, 11, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(37, 12, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(36, 13, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(35, 15, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(34, 16, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(33, 17, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(32, 19, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(31, 20, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(30, 21, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(29, 23, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(28, 24, vel_left, 0, 40, 20, 10000, -100000),
+		Obstacle(27, 25, vel_left, 0, 40, 20, 10000, -100000),
+	],
+	[
+		(38, 11),
+		(37, 12),
+		(36, 13),
+		(35, 15),
+		(34, 16),
+		(33, 17),
+		(32, 19),
+		(31, 20),
+		(30, 21),
+		(29, 23),
+		(28, 24),
+		(27, 25)
+		]
+]
+
+## SAVING DATA FOR OBSTACLES
 
 #pickle.dump(obstacles, open("obs_1.dat", "wb"))
 #pickle.dump(obstacles_2, open("obs_2.dat", "wb"))
-pickle.dump(obstacles_3, open("obs_3.dat", "wb"))
+#pickle.dump(obstacles_3, open("obs_3.dat", "wb"))
+pickle.dump(obstacles_4, open("obs_4.dat", "wb"))
