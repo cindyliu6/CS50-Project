@@ -177,7 +177,6 @@ def main():
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 
 	# Initialize default values for game
-	run = True
 	game = True
 	homepage = True
 	gamemode = 0
@@ -218,6 +217,9 @@ def main():
 
 			# Press right key or enter to continue
 			elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
+
+				# Reinitialize run as True if player leaves and comes back
+				run = True
 				homepage = False
 
 			pygame.display.update()
@@ -229,10 +231,6 @@ def main():
 			level = 1
 			alive = True
 			win = False
-
-			# Reinitialize run as True if player leaves and comes back
-			if homepage:
-				run = True
 
 			# Iterate through each level
 			while level <= PLAY_LEVELS:
@@ -484,6 +482,7 @@ def main():
 				keys = pygame.key.get_pressed()
 				if keys[pygame.K_h]:
 					homepage = True
+
 					break
 
 				if not run:
