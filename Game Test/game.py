@@ -15,7 +15,7 @@ screen_width = WIDTH * SIZE
 screen_height = HEIGHT * SIZE + 50
 START = (5, 5)
 END = (50, 35)
-LEVELS = 3
+PLAY_LEVELS = 5
 
 # define common colors
 black = (0, 0, 0)
@@ -28,7 +28,7 @@ blue = (0, 0, 255)
 vel_left = 1
 vel_right = -1
 
-# show text on screen (this probs is not the best way to do this...)
+# show text on screen
 def draw_text(text, font, text_col, x, y, screen):
 	pygame.font.init()
 	img = font.render(text, True, text_col)
@@ -45,14 +45,12 @@ DIR = {
 	}
 
 # drawing game surface
-def draw_grid(surface, walls, path):
+def draw_grid(surface, walls):
 	for y in range(0, HEIGHT):
 		for x in range(0, WIDTH):
 			r = pygame.Rect((x * SIZE, y * SIZE), (SIZE, SIZE))
 			if (x, y) in walls:
 			   color = (255,255,255)
-			elif (x,y) in path:
-				color = (0, 255, 255)
 			else:
 			   color = (0,0,0)
 			pygame.draw.rect(surface, color, r)
@@ -190,12 +188,11 @@ def main():
 			alive = True
 			win = False
 
-			while level <= LEVELS:
+			while level <= PLAY_LEVELS:
 				player = Player (START[0], START[1])
 				obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 				walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
 				board = get_board(WIDTH, HEIGHT, walls)
-				path = find_path(board, START, END)
 
 				while run:
 
@@ -224,7 +221,7 @@ def main():
 							if player.get_position() == obstacles[0][i].get_position():
 								alive = False
 
-						draw_grid(screen, walls, path)
+						draw_grid(screen, walls)
 						goal.draw(screen)
 						player.draw(screen)
 
@@ -306,8 +303,7 @@ def main():
 			walls = pickle.load(open("Game Test/level_data/walls_" + str(level) + ".dat", "rb"))
 			obstacles = pickle.load(open("Game Test/level_data/obs_" + str(level) + ".dat", "rb"))
 			board = get_board(WIDTH, HEIGHT, walls)
-			path = find_path(board, START, END)
-
+			path = find_path(board, START, END, level)
 
 			if gamemode == 1:
 				population = Population(500, START[0], START[1], END[0], END[1], 500, path, True)
@@ -330,7 +326,7 @@ def main():
 					if event.type == pygame.QUIT:
 						run = False
 
-				draw_grid(screen, walls, path)
+				draw_grid(screen, walls)
 				goal.draw(screen)
 
 				draw_text("Press H to go to home screen", instruction_font, white, 50, 600, screen)

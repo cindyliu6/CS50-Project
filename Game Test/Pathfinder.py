@@ -4,7 +4,7 @@
 
 # BFS algorithm used in fitness function
 # Finds path
-def find_path(board, start, end):
+def find_path(board, start, end, level):
     # Start path with last tile in path
     path = [end]
 
@@ -67,31 +67,32 @@ def find_path(board, start, end):
         # Search around for a square with a value one lower on the board and add to path
         # Go backward to forward to avoid dead ends
         # This path function was modified depending on which level was being trained
-        if board[x-1][y] == board[x][y] - 1:
-            path.append((y, x-1))
+        if level == 1 or level == 2:
+            if board[x-1][y] == board[x][y] - 1:
+                path.append((y, x-1))
 
-        elif board[x+1][y] == board[x][y] - 1:
-            path.append((y, x+1))
+            elif board[x+1][y] == board[x][y] - 1:
+                path.append((y, x+1))
 
-        elif board[x][y-1] == board[x][y] - 1:
-            path.append((y-1, x))
+            elif board[x][y-1] == board[x][y] - 1:
+                path.append((y-1, x))
 
-        elif board[x][y+1] == board[x][y] - 1:
-            path.append((y+1, x))
+            elif board[x][y+1] == board[x][y] - 1:
+                path.append((y+1, x))
 
-        ## for Level 3, path alg change
-        
-        #if board[x][y-1] == board[x][y] - 1:
-        #    path.append((y-1, x))
+        # for Level 3, path alg change
+        else:
+            if board[x][y-1] == board[x][y] - 1:
+                path.append((y-1, x))
 
-        #elif board[x][y+1] == board[x][y] - 1:
-        #    path.append((y+1, x))
+            elif board[x][y+1] == board[x][y] - 1:
+                path.append((y+1, x))
 
-        #elif board[x-1][y] == board[x][y] - 1:
-        #    path.append((y, x-1))
+            elif board[x-1][y] == board[x][y] - 1:
+                path.append((y, x-1))
 
-        #elif board[x+1][y] == board[x][y] - 1:
-        #    path.append((y, x+1))
+            elif board[x+1][y] == board[x][y] - 1:
+                path.append((y, x+1))
 
 
         # Check if the start has been reached

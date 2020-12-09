@@ -12,7 +12,6 @@ class Dot(object):
     def __init__(self, w, h, brainsize):
         # Dot has brain and position
         self.brain = Brain(brainsize)
-        self.brainsize = brainsize
         self.pos = (w, h)
 
         # Store initial position
@@ -43,7 +42,6 @@ class Dot(object):
     def move(self, walls):
         # Continue moving while moves exist in the brain
         if self.brain.size > self.brain.step:
-
             # Iterate through moves to change position
             currVal = self.brain.directions[self.brain.step]
             nextStep = tuple(map(operator.add, self.pos, currVal))
@@ -101,6 +99,6 @@ class Dot(object):
 
     # Make a baby dot by cloning it
     def makeBaby(self):
-        baby = Dot(self.w, self.h, self.brainsize)
+        baby = Dot(self.w, self.h, self.brain.size)
         baby.brain = self.brain.clone()
         return baby
