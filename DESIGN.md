@@ -2,7 +2,9 @@
 
 ### Gamemodes:
 Gamemode 0: Player Version - try to beat the World's Hardest Game yourself!
+
 Gamemode 1: Training Version - watch our genetic learning model in action as it learns (from scratch) to beat the game
+
 Gamdemode 2: Watch Version - watch a trained model beat the game!
 
 ## Recreating the World's Hardest Game using Pygame
