@@ -3,19 +3,19 @@
 ### Gamemodes:
 Gamemode 0: Player Version - try to beat the World's Hardest Game yourself!
 
-Gamemode 1: Training Version - watch our genetic learning model in action as it learns (from scratch) to beat the game
+Gamemode 1: Training Version - watch our genetic learning model in action as it learns (from scratch) to beat the game!
 
 Gamdemode 2: Watch Version - watch a trained model beat the game!
 
 ## Recreating the World's Hardest Game using Pygame
 
-First, we created our own version of the World's Hardest Game in Pygame. To do so, we created a generalized grid-based board which could be used for our different levels. We also created classes for the player, obstacles, and goal which could be generalized to run each of our levels. 
+First, we created our own version of the World's Hardest Game in Pygame. To do so, we created a generalized grid-based board which could be used for our different levels. We also created classes for the player, obstacles, and goal which could be generalized to run each of our levels. The classes contain functions to draw and get the position of the object, as well as move and update, if necessary.
 
-The various gamemodes and display options are implemented using a series of while loops - within the outermost game loop, we have a homepage loop which welcomes the user and prompts them to choose between our 3 gamemodes. If the user selects Gamemode 0 (Player Version), we render a simple board with the obstacles, player, and goal for Level 1. Player movement is controlled by keyboard arrows - allowing the player to move in 4 directions (up, down, left, right) where each direction is represented by a unit vector stored in a tuple. At each position, we check for collisions with obstacles, walls, and the goal. If the player hits an obstacle, the player dot is returned to the start. If the player reaches the goal, then the next level is generated. If the user selects Gamemode 1 or 2, the levelSelect while loop allows them to select between Levels 1-3 to either train or watch. The train gamemode generates a population of size 500 (population class explained in Genetic Learning Algorithm section) and the watch gamemode generates a single trained dot. 
+The various gamemodes and display options are implemented using a series of while loops. Within the outermost game loop, we have a homepage loop which welcomes the user and prompts them to choose between our 3 gamemodes. If the user selects Gamemode 0 (Player Version), we render a simple board with the obstacles, player, and goal for Level 1. Player movement is controlled by keyboard arrows - allowing the player to move in 4 directions (up, down, left, right) where each direction is represented by a unit vector stored in a tuple. At each position, we check for collisions with obstacles, walls, and the goal. If the player hits an obstacle, the player dot is returned to the start. If the player reaches the goal, then the next level is generated. If the user selects Gamemode 1 or 2, the levelSelect while loop allows them to select between Levels 1-3 to train or watch. The train gamemode generates a population of size 500 (population class explained in Genetic Learning Algorithm section) and the watch gamemode generates a single trained dot. 
 
-At any point in the game in any of the gamemodes, users can press H to return to homepage, which breaks out of the gamemode-specific while loop and returns to the general gamemode loop. This allows users to easily switch to a different gamemode and/or level.
+At any point in the game in any of the gamemodes, users can press H to return to homepage, which breaks out of the gamemode-specific while loop and returns to the general homepage loop. This allows users to easily switch to a different gamemode and/or level.
 
-talk about making new levels (walls and obstacles)
+To create each level, we passed in binary files defining the locations of walls and obstacles. The location of walls are specified using a list of grid pieces from the board. Obstacles were created using the general Obstacle class as well a tuple containing their starting location. We then used Python's pickle module to convert our wall and obstacle lists into binary files that the program could read when called.
 
 ## Pathfinding Algorithm
 
