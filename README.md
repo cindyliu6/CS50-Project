@@ -10,7 +10,7 @@ Our project's objective was to use a genetic learning algorithm to beat our vers
 
 ## Getting Started 
 
-Before running the game, it is essential to have installed Python from https://www.python.org/downloads/ , Pygame from https://www.pygame.org/wiki/GettingStarted. Then, t get started with the game itself, download the zip file onto your local computer and unzip the included files into a folder. After doing so, open the folder with either a local or cloud IDE, or navigate to the folder through terminal. 
+Before running the game, it is essential to have installed Python from https://www.python.org/downloads/ , as this game was made for Python 3.8.5. Then, to play the game, you need to install Pygame, which can be done by following these [instructions](https://www.pygame.org/wiki/GettingStarted). This may require you to install [pip](https://pip.pypa.io/en/stable/installing/). Then, to get started with the game itself, download the zip file onto your local computer and unzip the included files into a folder. After doing so, open the folder with either a local or cloud IDE, or navigate to the folder through terminal. 
 
 ## Running the Project 
 
