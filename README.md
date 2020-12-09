@@ -32,7 +32,7 @@ Level data is stored in the [level_data](https://github.com/jye-1243/CS50-Projec
 Currently, running the computer training gamemode does not save the train model to a specific file. To change this, you can uncomment line 453 in [game.py](https://github.com/jye-1243/CS50-Project/blob/main/game.py). This will generate a new file designed to store the best performing dot that is created through training. These files will be created in the main folder.
 
 ### Previous Attempts
-During the course of this project, we attempt to create a neural network using Keras to train the game based on similar code for [Snake](https://github.com/maurock/snake-ga). While this ultimately did not work (likely due to hardware limitations), the code creating the model can be found in the [PrevTests](https://github.com/jye-1243/CS50-Project/tree/main/PrevTests) folder. This folder also includes our own explorations of the snake code and genetic algorithms before implementing them into games.
+During the course of this project, we attempt to create a neural network using Keras to train the game based on similar code for [Snake](https://github.com/maurock/snake-ga). While this ultimately did not work (likely due to hardware limitations), the code creating the model can be found in the [PrevTests](https://github.com/jye-1243/CS50-Project/tree/main/PrevTests) folder. This folder also includes our own explorations of the snake code before implementing it into the game.
 
 
 
