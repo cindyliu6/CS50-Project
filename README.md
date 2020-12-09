@@ -10,7 +10,7 @@ Our project's objective was to use a genetic learning algorithm to beat "The Wor
 
 ## Getting Started 
 
-To get started, first download the zip file onto your local computer and unzip the included files into a folder. After doing so, open the folder with either a local or cloud IDE. Before running the game, it is essential to have installed Python from https://www.python.org/downloads/ , Pygame from https://www.pygame.org/wiki/GettingStarted , 
+To get started, first download the zip file onto your local computer and unzip the included files into a folder. After doing so, open the folder with either a local or cloud IDE. Before running the game, it is essential to have installed Python from https://www.python.org/downloads/ , Pygame from https://www.pygame.org/wiki/GettingStarted. 
 
 ## Running the Project 
 
