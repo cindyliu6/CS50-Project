@@ -26,8 +26,10 @@ class Population(object):
         self.goaly = goaly
         self.gen = 1
         self.bestDot = 0
+        # If in training mode, start with 20 steps and increment
         if train:
             self.maxStep = 20
+        # Otherwise, run as normal
         else:
             self.maxStep = brainsize
         self.brainsize = brainsize
@@ -104,13 +106,11 @@ class Population(object):
     def save(self, level):
         data = self.dots[0].brain.directions
         pickle.dump(data, open("data_" + str(level) + ".dat", "wb"))
-        # print(data)
 
     # Upload data into best dot given a level
     def upload(self, level):
         # loads saved data
         self.dots[0].brain.directions = pickle.load(open("trained_data/data_" + str(level) + ".dat", "rb"))
-       #  print(self.dots[0].brain.directions)
 
     # Accessor for generation value
     def generation(self):

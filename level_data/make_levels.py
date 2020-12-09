@@ -2,7 +2,7 @@ import pickle
 import os
 from game import Obstacle
 
-# THIS FILE STORES ALL DATA FOR FILES
+# THIS FILE STORES ALL DATA FOR LEVELS
 
 # DATA FOR EVERY LEVEL
 WIDTH = 60
