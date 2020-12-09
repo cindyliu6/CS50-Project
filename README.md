@@ -14,7 +14,7 @@ Before running the game, it is essential to have installed Python from https://w
 
 ## Running the Project 
 
-Running the game is done through the file game.py. Depending on your IDE, this will be done through different methods; however, if running through the Command Line Terminal or through CS50 IDE, run `python game.py` After you have run this file, you will see a homescreen presenting you the options to either play the game, watch the computer train, or to see a trained copy running thie game. Use the arrow keys to navigate through the homepage and the enter key to select the option that you wish to play. If you select the option to play the game, you will progress from level 1 to level 5. If you select the option to train the computer or watch a trained program run through the game, you will have the option to choose a specific level from 1 to 3. 
+Running the game is done through the file game.py. Depending on your IDE, this will be done through different methods; however, if running through the Command Line Terminal or through CS50 IDE, run `python game.py` in the main folder. After you have run this file, you will see a homescreen presenting you the options to either play the game, watch the computer train, or to see a trained copy running thie game. Use the arrow keys to navigate through the homepage and the enter key to select the option that you wish to play. If you select the option to play the game, you will progress from level 1 to level 5. If you select the option to train the computer or watch a trained program run through the game, you will have the option to choose a specific level from 1 to 3. 
 
 ## Playing the Game 
 
@@ -26,6 +26,8 @@ After selecting the option to train the computer or watch the computer play and 
 
 ## Additional Information
 ### Level Data
+Level data is stored in the `level_data` folder, along with the file used to create the .dat files. 
+
 ### Saving Training Data
 ### Previous Attempts
 
