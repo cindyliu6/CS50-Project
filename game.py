@@ -162,7 +162,7 @@ def main():
 
 	clock = pygame.time.Clock()
 	fps = 60
-	home_fps = 7
+	home_fps = 10
 
 	pygame.display.set_caption('Worlds Hardest Game')
 
@@ -204,6 +204,7 @@ def main():
 					homepage = False
 					game = False
 					run = False
+					levelSelect = False
 
 			# Toggle gamemode going up and down
 			# 0 for play, 1 for train, 2 for watch
@@ -251,6 +252,7 @@ def main():
 						if event.type == pygame.QUIT:
 							level = 100
 							run = False
+							levelSelect = False
 							game = False
 
 					# If player is still alive and has not won, let them move
@@ -339,10 +341,10 @@ def main():
 		# Computer run mode
 		# Only 3 computer trained levels
 		else:
-			# Open up level select screen and reinitialize run if needed
-			levelSelect = True
+			# Open up level select screen
+			if game:
+				levelSelect = True
 			level = 0
-			run = True
 
 			# Level select screen
 			while levelSelect:
@@ -384,6 +386,9 @@ def main():
 			if not game:
 				break
 
+			# Reinitialize run if needed
+			run = True
+
 			# Otherwise, open up data for the level and find the best path
 			walls = pickle.load(open("level_data/walls_" + str(level) + ".dat", "rb"))
 			obstacles = pickle.load(open("level_data/obs_" + str(level) + ".dat", "rb"))
@@ -418,6 +423,7 @@ def main():
 					if event.type == pygame.QUIT:
 						run = False
 						game = False
+						levelSelect = False
 
 				# Draw board and goal onto screen
 				draw_grid(screen, walls)
