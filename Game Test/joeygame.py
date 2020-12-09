@@ -135,24 +135,17 @@ def main():
 		walls.append((0, x))
 		walls.append((WIDTH-1, x))
 
-	#for x in range(WIDTH - 10):
-	#	walls.append((x, 10))
+	for x in range(HEIGHT-20):
+		walls.append((42,x))
 
-	#for x in range(10, WIDTH):
-	#	walls.append((x, 30))
-
-	for x in range(HEIGHT-10):
-		walls.append((18, x))
-
-	for x in range(10, HEIGHT):
+	for x in range(30, HEIGHT):
 		walls.append((42, x))
 
 	for x in range(13):
 		walls.append((x, 9))
-		walls.append((x, 27))
 
-	for x in range(6, 18):
-		walls.append((x, 18))
+	for x in range(18, 42):
+		walls.append((x, 9))
 
 	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 	pygame.display.set_caption('Worlds Hardest Game')
@@ -167,32 +160,41 @@ def main():
 
 	obstacles = [[
 
-			Obstacle(38, 11, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(37, 12, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(36, 13, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(35, 15, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(34, 16, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(33, 17, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(32, 19, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(31, 20, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(30, 21, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(29, 23, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(28, 24, vel_left, 0, 40, 20, 10000, -100000),
-			Obstacle(27, 25, vel_left, 0, 40, 20, 10000, -100000),
+			Obstacle(37, 11, 0, vel_down, 40, 20, 37, 11),
+			Obstacle(36, 11, 0, vel_down, 40, 20, 37, 11),
+			Obstacle(35, 11, 0, vel_down, 40, 20, 37, 11),
+			Obstacle(34, 11, 0, vel_down, 40, 20, 37, 11),
+			Obstacle(33, 11, 0, vel_down, 40, 20, 37, 11),
+			Obstacle(32, 11, 0, vel_down, 40, 20, 37, 11),
+			Obstacle(27, 20, 0, vel_up, 40, 20, 37, 11),
+			Obstacle(26, 20, 0, vel_up, 40, 20, 37, 11),
+			Obstacle(25, 20, 0, vel_up, 40, 20, 37, 11),
+			Obstacle(24, 20, 0, vel_up, 40, 20, 37, 11),
+			Obstacle(23, 20, 0, vel_up, 40, 20, 37, 11),
+			Obstacle(22, 20, 0, vel_up, 40, 20, 37, 11),
+			Obstacle(45, 30, vel_left, 0, 57, 44, 100, -100),
+			Obstacle(46, 30, vel_left, 0, 57, 44, 100, -100),
+			Obstacle(42, 23, 0, vel_up, 40, 20, 28, 21),
+			Obstacle(42, 22, 0, vel_up, 40, 20, 28, 21)
 		],
 		[
-			(38, 11),
-			(37, 12),
-			(36, 13),
-			(35, 15),
-			(34, 16),
-			(33, 17),
-			(32, 19),
-			(31, 20),
-			(30, 21),
-			(29, 23),
-			(28, 24),
-			(27, 25)
+			(37, 11),
+			(36, 11),
+			(35, 11),
+			(34, 11),
+			(33, 11),
+			(32, 11),
+			(27, 20),
+			(26, 20),
+			(25, 20),
+			(24, 20),
+			(23, 20),
+			(22, 20),
+			(45, 30),
+			(46, 30),
+			(42, 23),
+			(42, 22),
+
 			]
 	]
 	# define font
