@@ -4,7 +4,7 @@
 
 Welcome to our CS50 project! Justin, Cindy and Joey are excited to share with you the work that we have done over the last couple of weeks. 
 
-Video: https://youtu.be/GhRuss3m7B8
+A brief presentation video of our project can be found here: https://youtu.be/GhRuss3m7B8
 
 ## Project Overview 
 
