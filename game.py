@@ -2,13 +2,20 @@ import pygame
 import numpy as np
 import operator
 import random
+import pickle
+import os
+from Population import Population
+from Pathfinder import find_path
 
 # define dimensions
 HEIGHT = 40
 WIDTH = 60
 SIZE = 15
 screen_width = WIDTH * SIZE
-screen_height = HEIGHT * SIZE
+screen_height = HEIGHT * SIZE + 50
+START = (5, 5)
+END = (50, 35)
+PLAY_LEVELS = 5
 
 # define common colors
 black = (0, 0, 0)
@@ -17,8 +24,13 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 
-# show text on screen (this probs is not the best way to do this...)
+# define velocities
+vel_left = 1
+vel_right = -1
+
+# show text on screen
 def draw_text(text, font, text_col, x, y, screen):
+	pygame.font.init()
 	img = font.render(text, True, text_col)
 	screen.blit(img, (x, y))
 
@@ -26,212 +38,342 @@ def draw_text(text, font, text_col, x, y, screen):
 # bg = pygame.image.load('img/space.jpg')
 
 DIR = {
-    'u' : (0, -1), # north is -y
-    'd' : (0, 1),
-    'l' : (-1,0),
-    'r' : (1,0)
-    }
+	'u' : (0, -1), # north is -y
+	'd' : (0, 1),
+	'l' : (-1,0),
+	'r' : (1,0)
+	}
 
 # drawing game surface
 def draw_grid(surface, walls):
-    for y in range(0, HEIGHT):
-        for x in range(0, WIDTH):
-            r = pygame.Rect((x * SIZE, y * SIZE), (SIZE, SIZE))
-            if (x, y) in walls:
-               color = (255,255,255)
-            else:
-               color = (0,0,0)
-            pygame.draw.rect(surface, color, r)
+	for y in range(0, HEIGHT):
+		for x in range(0, WIDTH):
+			r = pygame.Rect((x * SIZE, y * SIZE), (SIZE, SIZE))
+			if (x, y) in walls:
+			   color = (255,255,255)
+			else:
+			   color = (0,0,0)
+			pygame.draw.rect(surface, color, r)
+
+def get_board(w, h, walls):
+	board =[]
+	for i in range(h):
+		row = []
+		for j in range(w):
+			if (j, i) in walls:
+				row.append(-1)
+			else:
+				row.append(0)
+		board.append(row)
+	return board
 
 # moving obstacle class
 class Obstacle():
-    def __init__(self, x, y, vel):
-        self.vel = vel
-        self.position = (x, y)
+	def __init__(self, x, y, xvel, yvel, x_bound, x_bound2, y_bound, y_bound2):
+		self.xvel = xvel
+		self.yvel = yvel
+		self.position = (x, y)
+		self.xlimit = (x_bound)
+		self.xlimit2 = (x_bound2)
+		self.ylimit = (y_bound)
+		self.ylimit2 = (y_bound2)
 
-    def update(self):
-        self.position = tuple(map(operator.add, self.position, (self.vel, 0)))
-        if self.position[0] > 40 or self.position[0] < 20:
-            self.vel = -self.vel
+	def update(self):
+		self.position = tuple(map(operator.add, self.position, (self.xvel, self.yvel)))
+		if self.position[0] > self.xlimit or self.position[0] < self.xlimit2:
+			self.xvel = -self.xvel
+		if self.position[1] > self.ylimit or self.position[1] < self.ylimit2:
+			self.yvel = -self.yvel
 
-    def draw(self, surface):
-        r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
-        pygame.draw.rect(surface, green, r)
+	def draw(self, surface):
+		r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
+		pygame.draw.rect(surface, green, r)
 
-    def get_position(self):
-        return self.position
+	def get_position(self):
+		return self.position
 
 # player class
 class Player():
 
-    def __init__(self, x, y):
-        self.position = (x, y)
-        pass
+	def __init__(self, x, y):
+		self.position = (x, y)
+		pass
 
-    def get_position(self):
-        return self.position
+	def get_position(self):
+		return self.position
 
-    def set_position(self, x, y):
-        self.position = (x, y)
+	def set_position(self, x, y):
+		self.position = (x, y)
 
-    def move(self, dir):
-        self.position = tuple(map(operator.add, self.position, DIR[dir]))
+	def move(self, dir):
+		self.position = tuple(map(operator.add, self.position, DIR[dir]))
 
-    def draw(self, surface):
-        r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
-        pygame.draw.rect(surface, red, r)
+	def draw(self, surface):
+		r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
+		pygame.draw.rect(surface, red, r)
 
 # goal class
 class Goal():
-    def __init__ (self, x, y):
-        self.position = (x, y)
+	def __init__ (self, x, y):
+		self.position = (x, y)
 
-    def draw(self, surface):
-        r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
-        pygame.draw.rect(surface, blue, r)
+	def draw(self, surface):
+		r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
+		pygame.draw.rect(surface, blue, r)
 
-    def get_position(self):
-        return self.position
-
-# ai agent class
-class Agent():
-    def __init__(self, x, y):
-        self.player = Player(x,y);
-
-    def move(self):
-        i = random.randint(0, 4)
-        if i == 0:
-            self.player.move('l')
-        elif i == 1:
-            self.player.move('r')
-        elif i == 2:
-            self.player.move('u')
-        else:
-            self.player.move('d')
-
-    def get_position(self):
-        return self.player.get_position()
-
-    def draw(self, surface):
-        self.player.draw(surface)
+	def get_position(self):
+		return self.position
 
 
 def main():
-    pygame.init()
+	pygame.init()
 
-    clock = pygame.time.Clock()
-    fps = 20
+	clock = pygame.time.Clock()
+	fps = 60
 
-    walls = []
+	pygame.display.set_caption('Worlds Hardest Game')
 
-    for x in range(WIDTH):
-        walls.append((x, 0))
-        walls.append((x, HEIGHT-1))
+	goal = Goal(END[0], END[1])
 
-    for x in range(HEIGHT):
-        walls.append((0, x))
-        walls.append((WIDTH-1, x))
+	screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
 
-    for x in range(HEIGHT-10):
-        walls.append((18, x))
+	# define fonts
+	font = pygame.font.SysFont('Bauhaus 93', 70)
+	homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
+	instruction_font = pygame.font.SysFont('Arial', 30)
 
-    for x in range(10, HEIGHT):
-        walls.append((42, x))
+	homepage = True
+	gamemode = 0
 
-    screen = pygame.display.set_mode((screen_width, screen_height), 0, 32)
-    pygame.display.set_caption('Worlds Hardest Game')
+	run = True
+	game = True
 
-    surface = pygame.Surface(screen.get_size())
-    surface = surface.convert()
-    draw_grid(surface, walls)
+	while game:
+		while homepage:
+			clock.tick(10)
 
-    #player = Player(5, 5)
-    player = Agent(5,10)
-    goal = Goal(55, 35)
 
-    vel_left = 1
-    vel_right = -1
+			image = pygame.image.load('res/homepage.jpg')
+			pygame.draw.ellipse(image, red, (230, 265 + gamemode * 60, 20, 20))
+			draw_text("PLAY GAME", homepage_font, black, 280, 250, image)
+			draw_text("TRAIN COMPUTER", homepage_font, black, 280, 310, image)
+			draw_text("WATCH COMPUTER", homepage_font, black, 280, 370, image)
 
-    obstacles = [
-        Obstacle(31, 11, vel_left),
-        Obstacle(32, 12, vel_left),
-        Obstacle(33, 13, vel_left),
-        Obstacle(34, 14, vel_right),
-        Obstacle(35, 15, vel_right),
-        Obstacle(36, 16, vel_right),
-    ]
+			screen.blit(image, (0,0))
 
-    # define font
-    font = pygame.font.SysFont('Bauhaus 93', 60)
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					run = False
 
-    # .Rect(x-coord, y-coord, width, height)
-    #player = pygame.Rect(50, 50, 30, 30)
-    #goal = pygame.Rect(1100, 50, 50, 50)
+			keys = pygame.key.get_pressed()
+			if keys[pygame.K_UP]:
+				gamemode = (gamemode - 1) % 3
+			elif keys[pygame.K_DOWN]:
+				gamemode = (gamemode + 1) % 3
+			elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
+				homepage = False
 
-    run = True
-    alive = True
-    win = False
+			pygame.display.update()
 
-    while run:
-        clock.tick(fps)
 
-        #draw background
-        # screen.blit(bg, (0,0))
+		if gamemode == 0:
 
-        #delay start of game by 10ms
-        pygame.time.delay(10)
+			def collisions(solids, x, y):
+				for solid in solids:
+					if player.get_position()[0] == solid[0] + x and player.get_position()[1] == solid[1] + y:
+							return True
+				return False
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+			level = 1
+			alive = True
+			win = False
 
-        # move player using arrow keys
-        #keys = pygame.key.get_pressed()
-        #if keys[pygame.K_LEFT] and player.get_position()[0] > 0:
-        #    player.move('l')
-        #if keys[pygame.K_RIGHT] and player.get_position()[0] < WIDTH - 1:
-        #    player.move('r')
-        #if keys[pygame.K_UP] and player.get_position()[1] > 0:
-        #    player.move('u')
-        #if keys[pygame.K_DOWN] and player.get_position()[1] < HEIGHT - 1:
-        #    player.move('d')
+			while level <= PLAY_LEVELS:
+				player = Player (START[0], START[1])
+				obstacles = pickle.load(open("level_data/obs_" + str(level) + ".dat", "rb"))
+				walls = pickle.load(open("level_data/walls_" + str(level) + ".dat", "rb"))
+				board = get_board(WIDTH, HEIGHT, walls)
 
-        ## collision with obstacle
-        for obstacle in obstacles:
-            obstacle.update()
-            if player.get_position() == obstacle.get_position():
-                alive = False
+				while run:
 
-        # collision with wall
-        for wall in walls:
-            if player.get_position() == wall:
-                alive = False
+					clock.tick(fps)
+					for event in pygame.event.get():
+						if event.type == pygame.QUIT:
+							level = 100
+							run = False
 
-        if player.get_position() == goal.get_position():
-            win = True
+					if alive == True and win == False:
+						
+						pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 
-        if alive == True and win == False:
-            player.move()
-            print(player.get_position())
+						# move player using arrow keys
+						move = pygame.key.get_pressed()
+						if move[pygame.K_LEFT] and not collisions(walls, 1, 0):
+							player.move('l')
+						if move[pygame.K_RIGHT] and not collisions(walls, -1, 0):
+							player.move('r')
+						if move[pygame.K_UP] and not collisions(walls, 0, 1):
+							player.move('u')
+						if move[pygame.K_DOWN] and not collisions(walls, 0, -1):
+							player.move('d')
 
-            draw_grid(surface, walls)
-            player.draw(surface)
-            goal.draw(surface)
+						for i in range(len(obstacles[0])):
+							if player.get_position() == obstacles[0][i].get_position():
+								alive = False
 
-            for obstacle in obstacles:
-                obstacle.draw(surface)
+						draw_grid(screen, walls)
+						goal.draw(screen)
+						player.draw(screen)
 
-            screen.blit(surface, (0,0))
+						for i in range(len(obstacles[0])):
+							obstacles[0][i].update()
+							obstacles[0][i].draw(screen)
+							if player.get_position() == obstacles[0][i].get_position():
+								alive = False
 
-        else:
-            if win:
-                draw_text("You Win!", font, white, 500, 20, screen)
-            else:
-                draw_text("Game Over", font, white, 500, 20, screen)
+						if player.get_position() == goal.get_position():
+							win = True
 
-        pygame.display.update()
-        if not run:
-            pygame.quit()
+					else:
+						if win:
+							draw_text("You Win!", font, white, 450, 20, screen)
+							win = False
+							level += 1
+						else:
+							draw_text("Try Again", font, white, 450, 20, screen)
+							alive = True
+
+						pygame.display.update()
+						pygame.time.wait(1000)
+						break
+
+					draw_text("Press R to restart level", instruction_font, white, 50, 600, screen)
+					draw_text("Press H to go to home screen", instruction_font, white, 400, 600, screen)
+
+					pygame.display.update()
+
+					keys = pygame.key.get_pressed()
+					# restarts current level
+					if keys[pygame.K_r]:
+						break
+					# back to homepage
+					elif keys[pygame.K_h]:
+						homepage = True
+						run = False
+
+				if not run:
+					level = 100
+					if not homepage:
+						pygame.quit()
+
+			## once the player beats level 3, maybe return to homepage?
+			homepage = True
+
+		else:
+			levelSelect = True
+			level = 0
+			run = True
+
+			while levelSelect:
+				clock.tick(10)
+
+				image = pygame.image.load('res/level_select.jpg')
+				pygame.draw.ellipse(image, red, (230, 265 + level * 60, 20, 20))
+				draw_text("LEVEL 1", homepage_font, black, 280, 250, image)
+				draw_text("LEVEL 2", homepage_font, black, 280, 310, image)
+				draw_text("LEVEL 3", homepage_font, black, 280, 370, image)
+
+				screen.blit(image, (0,0))
+
+				for event in pygame.event.get():
+					if event.type == pygame.QUIT:
+						run = False
+
+				keys = pygame.key.get_pressed()
+				if keys[pygame.K_UP]:
+					level = (level - 1) % 3
+				elif keys[pygame.K_DOWN]:
+					level = (level + 1) % 3
+				elif keys[pygame.K_RIGHT] or keys[pygame.K_RETURN]:
+					level += 1
+					levelSelect = False
+					
+				pygame.display.update()
+
+			walls = pickle.load(open("level_data/walls_" + str(level) + ".dat", "rb"))
+			obstacles = pickle.load(open("level_data/obs_" + str(level) + ".dat", "rb"))
+			board = get_board(WIDTH, HEIGHT, walls)
+			path = find_path(board, START, END, level)
+
+			if gamemode == 1:
+				population = Population(500, START[0], START[1], END[0], END[1], 500, path, True)
+
+				# If training needed to be spread out over time this can be uncommented
+				# population.upload(level)
+
+			elif gamemode == 2:
+				population = Population(1, START[0], START[1], END[0], END[1], 500, path, False)
+				population.upload(level)
+
+			while run:
+				clock.tick(fps)
+
+				pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
+				#delay start of game by 10ms
+				pygame.time.delay(10)
+
+				for event in pygame.event.get():
+					if event.type == pygame.QUIT:
+						run = False
+
+				draw_grid(screen, walls)
+				goal.draw(screen)
+
+				draw_text("Press H to go to home screen", instruction_font, white, 50, 600, screen)
+
+				for i in range(len(obstacles[0])):
+					obstacles[0][i].update()
+					obstacles[0][i].draw(screen)
+					obstacles[1][i] = obstacles[0][i].get_position()
+
+				pygame.time.wait(1)
+
+				if gamemode == 1:
+
+					gen = population.generation()
+					draw_text("Generation: " + str(gen), instruction_font, white, 620, 600, screen)
+
+					# keys = pygame.key.get_pressed()
+					# if keys[pygame.K_h]:
+					# 	homepage = True
+					# 	break
+
+					allDead = population.allDotsDead()
+					if allDead:
+						population.calculateFitness()
+						population.naturalSelection()
+						population.save(level)
+						population.mutateBabies()
+						obstacles = pickle.load(open("level_data/obs_" + str(level) + ".dat", "rb"))
+					else:
+						population.update(walls, obstacles[1])
+						population.show(screen)
+
+				if gamemode == 2:
+					population.update(walls, obstacles[1])
+					population.show(screen)
+
+				pygame.display.update()
+
+				keys = pygame.key.get_pressed()
+				if keys[pygame.K_h]:
+					homepage = True
+					break
+
+				if not run:
+					pygame.quit()
+		if not game:
+			pygame.quit()
 
 if __name__ == "__main__":
-    main()
+	main()

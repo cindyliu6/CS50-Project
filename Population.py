@@ -103,13 +103,13 @@ class Population(object):
     # Save directions from best dot
     def save(self, level):
         data = self.dots[0].brain.directions
-        pickle.dump(data, open("data_" + str(level) + ".dat", "wb"))
+        pickle.dump(data, open("trained_data/data_" + str(level) + ".dat", "wb"))
         # print(data)
 
     # Upload data into best dot given a level
     def upload(self, level):
         # loads saved data
-        self.dots[0].brain.directions = pickle.load(open("data_" + str(level) + ".dat", "rb"))
+        self.dots[0].brain.directions = pickle.load(open("trained_data/data_" + str(level) + ".dat", "rb"))
        #  print(self.dots[0].brain.directions)
 
     # Accessor for generation value
