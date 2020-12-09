@@ -162,10 +162,10 @@ def main():
 
 	clock = pygame.time.Clock()
 	fps = 60
-	home_fps = 10
+	home_fps = 7
 
 	pygame.display.set_caption('Worlds Hardest Game')
-	
+
 	# define fonts
 	font = pygame.font.SysFont('Bauhaus 93', 70)
 	homepage_font = pygame.font.SysFont('Bauhaus 93', 45)
@@ -178,7 +178,7 @@ def main():
 
 	# Initialize default values for game
 	run = True
-	game = True	
+	game = True
 	homepage = True
 	gamemode = 0
 
@@ -191,7 +191,7 @@ def main():
 			# Draw image and text for mode select screen
 			image = pygame.image.load('res/homepage.jpg')
 			# Draw circle on screen based on which gamemode is selected
-			pygame.draw.ellipse(image, red, (230, 265 + gamemode * 60, 20, 20))
+			pygame.draw.ellipse(image, red, (230, 255 + gamemode * 60, 20, 20))
 			draw_text("PLAY GAME", homepage_font, black, 280, 250, image)
 			draw_text("TRAIN COMPUTER", homepage_font, black, 280, 310, image)
 			draw_text("WATCH COMPUTER", homepage_font, black, 280, 370, image)
@@ -209,7 +209,7 @@ def main():
 			# 0 for play, 1 for train, 2 for watch
 			keys = pygame.key.get_pressed()
 
-			# Use mod3 to shift between 0, 1, 2 
+			# Use mod3 to shift between 0, 1, 2
 			if keys[pygame.K_UP]:
 				gamemode = (gamemode - 1) % 3
 			elif keys[pygame.K_DOWN]:
@@ -230,7 +230,8 @@ def main():
 			win = False
 
 			# Reinitialize run as True if player leaves and comes back
-			run = True
+			if homepage:
+				run = True
 
 			# Iterate through each level
 			while level <= PLAY_LEVELS:
@@ -244,7 +245,7 @@ def main():
 
 					# Tick clock at standard fps
 					clock.tick(fps)
-					
+
 					# Break all loops if pygame quits
 					for event in pygame.event.get():
 						if event.type == pygame.QUIT:
@@ -254,7 +255,7 @@ def main():
 
 					# If player is still alive and has not won, let them move
 					if alive == True and win == False:
-						
+
 						# Draw black screen (reset background)
 						pygame.draw.rect(screen, black, pygame.Rect(0,0, screen_width, screen_height))
 
@@ -287,7 +288,7 @@ def main():
 							obstacles[0][i].update()
 							obstacles[0][i].draw(screen)
 							# If obstacle hits player, then player dies
-							# This prevents some skipping over 
+							# This prevents some skipping over
 							# (bug occured if obstacles are not checked both before and after player movement)
 							if player.get_position() == obstacles[0][i].get_position():
 								alive = False
@@ -350,7 +351,7 @@ def main():
 				# Open up level select screen
 				image = pygame.image.load('res/level_select.jpg')
 				# Draw ellipse based on selected level
-				pygame.draw.ellipse(image, red, (230, 265 + level * 60, 20, 20))
+				pygame.draw.ellipse(image, red, (230, 255 + level * 60, 20, 20))
 				draw_text("LEVEL 1", homepage_font, black, 280, 250, image)
 				draw_text("LEVEL 2", homepage_font, black, 280, 310, image)
 				draw_text("LEVEL 3", homepage_font, black, 280, 370, image)
@@ -376,14 +377,14 @@ def main():
 					# Go from 0-2 to 1-3 for levels
 					level += 1
 					levelSelect = False
-					
+
 				pygame.display.update()
-			
+
 			# Break out of loop if needed
 			if not game:
 				break
 
-			# Otherwise, open up data for the level and find the best path 
+			# Otherwise, open up data for the level and find the best path
 			walls = pickle.load(open("level_data/walls_" + str(level) + ".dat", "rb"))
 			obstacles = pickle.load(open("level_data/obs_" + str(level) + ".dat", "rb"))
 			board = get_board(WIDTH, HEIGHT, walls)
