@@ -152,7 +152,6 @@ def main():
 		while homepage:
 			clock.tick(10)
 
-
 			image = pygame.image.load('res/homepage.jpg')
 			pygame.draw.ellipse(image, red, (230, 265 + gamemode * 60, 20, 20))
 			draw_text("PLAY GAME", homepage_font, black, 280, 250, image)
@@ -247,8 +246,8 @@ def main():
 						pygame.time.wait(1000)
 						break
 
-					draw_text("Press R to restart level", instruction_font, white, 50, 600, screen)
-					draw_text("Press H to go to home screen", instruction_font, white, 400, 600, screen)
+					draw_text("Press R to restart level", instruction_font, white, 50, 605, screen)
+					draw_text("Press H to go to home screen", instruction_font, white, 400, 605, screen)
 
 					pygame.display.update()
 
@@ -329,7 +328,7 @@ def main():
 				draw_grid(screen, walls)
 				goal.draw(screen)
 
-				draw_text("Press H to go to home screen", instruction_font, white, 50, 600, screen)
+				draw_text("Press H to go to home screen", instruction_font, white, 50, 605, screen)
 
 				for i in range(len(obstacles[0])):
 					obstacles[0][i].update()
@@ -341,7 +340,7 @@ def main():
 				if gamemode == 1:
 
 					gen = population.generation()
-					draw_text("Generation: " + str(gen), instruction_font, white, 620, 600, screen)
+					draw_text("Generation: " + str(gen), instruction_font, white, 620, 605, screen)
 
 					# keys = pygame.key.get_pressed()
 					# if keys[pygame.K_h]:
@@ -352,7 +351,7 @@ def main():
 					if allDead:
 						population.calculateFitness()
 						population.naturalSelection()
-						population.save(level)
+						# population.save(level)
 						population.mutateBabies()
 						obstacles = pickle.load(open("level_data/obs_" + str(level) + ".dat", "rb"))
 					else:
