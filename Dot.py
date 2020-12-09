@@ -1,6 +1,5 @@
 from Brain import Brain
 import operator
-import math
 import pygame
 
 # BASED ON https://github.com/Code-Bullet/Smart-Dots-Genetic-Algorithm-Tutorial

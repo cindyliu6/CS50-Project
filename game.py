@@ -1,7 +1,5 @@
 import pygame
-import numpy as np
 import operator
-import random
 import pickle
 import os
 from Population import Population
@@ -33,8 +31,8 @@ blue = (0, 0, 255)
 DIR = {
 	'u' : (0, -1), # north is -y
 	'd' : (0, 1),
-	'l' : (-1,0),
-	'r' : (1,0)
+	'l' : (-1, 0),
+	'r' : (1, 0)
 	}
 
 
@@ -103,7 +101,7 @@ class Obstacle():
 	# Draw obstacle on screen
 	def draw(self, surface):
 		# Create rectangle and draw on screen at appropriate square in grid
-		r = pygame.Rect((self.position[0]*SIZE,self.position[1]*SIZE), (SIZE, SIZE))
+		r = pygame.Rect((self.position[0] * SIZE,self.position[1] * SIZE), (SIZE, SIZE))
 		pygame.draw.rect(surface, green, r)
 
 	# Return position of obstacle
@@ -252,6 +250,7 @@ def main():
 						if event.type == pygame.QUIT:
 							level = 100
 							run = False
+							game = False
 
 					# If player is still alive and has not won, let them move
 					if alive == True and win == False:
@@ -417,6 +416,7 @@ def main():
 				for event in pygame.event.get():
 					if event.type == pygame.QUIT:
 						run = False
+						game = False
 
 				# Draw board and goal onto screen
 				draw_grid(screen, walls)
